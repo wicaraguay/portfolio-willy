@@ -7,7 +7,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Github,
-  Gitlab,
   Terminal,
   Database,
   Server,
@@ -17,7 +16,6 @@ import {
   Mail,
   Linkedin,
   MapPin,
-  Code,
   GitBranch,
   Globe,
   ChevronUp,
