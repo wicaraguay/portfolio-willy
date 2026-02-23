@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Press+Start+2P&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Basketball';
+  src: url('./assets/fonts/Basketball1978.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Cheeky Mouse';
+  src: url('./assets/fonts/CheekyMouse1980.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Depthcharge';
+  src: url('./assets/fonts/Depthcharge1977.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Galaxian';
+  src: url('./assets/fonts/Galaxian1979.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Gee Bee';
+  src: url('./assets/fonts/GeeBee1978.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'HighWay Chase';
+  src: url('./assets/fonts/HighWayChase1980.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Quiz Show';
+  src: url('./assets/fonts/QuizShow1976.ttf') format('truetype');
+}
+
+@theme {
+  --font-sans: "Orbitron", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Orbitron", ui-monospace, SFMono-Regular, monospace;
+  --font-pixel: "Quiz Show", cursive;
+
+  /* Updated Orange/Yellow Gradient Palette */
+  --color-orange-300: #FFD54F;
+  /* Lighter yellow-orange */
+  --color-orange-400: #FFCA28;
+  /* Yellow-orange */
+  --color-orange-500: #FF8F00;
+  /* Main Orange */
+  --color-orange-600: #FF6F00;
+  /* Darker Orange */
+  --color-orange-900: #3E2723;
+  /* Very dark brown/orange */
+
+  --color-dark-900: #050505;
+  --color-dark-800: #0a0a0a;
+  --color-dark-700: #141414;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-dark-900);
+  color: #f3f4f6;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar for a sleek look */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dark-900);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-dark-700);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-orange-500);
+}
