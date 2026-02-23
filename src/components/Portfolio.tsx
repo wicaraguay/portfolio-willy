@@ -24,15 +24,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-  Tooltip
-} from 'recharts';
+
 
 
 // --- Mock Data ---
@@ -124,6 +116,29 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
   ];
   const statsList = initialData?.stats?.length > 0 ? initialData.stats : stats;
 
+  const settings = initialData?.settings || {
+    siteName: 'WILLY TECH',
+    heroBadge: 'Willan Caraguay • Data Engineer',
+    heroTitle1: 'Fullstack',
+    heroTitle2: 'Developer',
+    heroGithubUrl: 'github.com/developer',
+    heroGitlabUrl: 'gitlab.com/developer',
+    aboutTitle: 'Sobre mí',
+    aboutDescription: [
+      'Hola, soy un Ingeniero de Software Fullstack apasionado por los datos y la arquitectura de sistemas. Mi viaje comenzó con la curiosidad de cómo funcionan las cosas "bajo el capó" y evolucionó hacia la construcción de sistemas distribuidos complejos.',
+      'Me especializo en cerrar la brecha entre el análisis de datos complejos y las experiencias de usuario intuitivas. No solo escribo código; diseño soluciones que escalan, rinden y aportan valor real al negocio.',
+      'Cuando no estoy programando, estoy probablemente optimizando mi configuración de Linux, contribuyendo a proyectos Open Source o aprendiendo sobre las últimas tendencias en IA y Machine Learning.'
+    ],
+    aboutImage: '/images/willy.png',
+    arsenalTitle: 'Arsenal Técnico',
+    arsenalDescription: 'Mi enfoque fullstack me permite entender el ciclo de vida completo del software. Desde el diseño de bases de datos optimizadas y pipelines de datos, hasta la creación de interfaces de usuario fluidas y reactivas.',
+    whatsappNumber: '34600000000',
+    whatsappGreeting: '¿Hablamos de tu proyecto? 👋',
+    whatsappMessage: 'Estoy disponible para ayudarte a construir esa solución tecnológica que tienes en mente.',
+    footerText: 'Willy Tech',
+    copyright: 'Todos los derechos reservados.'
+  };
+
 
 
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -181,7 +196,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 text-white font-pixel font-bold text-sm md:text-base tracking-tight">
             <span className="text-orange-500 text-lg md:text-xl">{"<"}</span>
-            WILLY TECH
+            {settings.siteName}
             <span className="text-orange-500 text-lg md:text-xl">{"/>"}</span>
           </div>
 
@@ -241,12 +256,12 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-mono uppercase tracking-wider">
                 <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-                Willan Caraguay • Data Engineer
+                {settings.heroBadge}
               </div>
               <h1 className="text-4xl md:text-6xl font-pixel tracking-widest leading-[1.3] drop-shadow-lg">
-                <span className="text-white">Fullstack</span> <br />
+                <span className="text-white">{settings.heroTitle1}</span> <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-orange-500 to-orange-600">
-                  Developer
+                  {settings.heroTitle2}
                 </span>
               </h1>
               <p className="text-lg text-gray-400 max-w-xl leading-relaxed">
@@ -255,14 +270,14 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
             </div>
 
             <div className="flex flex-wrap items-center gap-4">
-              <a href={`https://${profile.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-medium transition-all shadow-[0_0_20px_rgba(255,159,28,0.3)] hover:shadow-[0_0_30px_rgba(255,159,28,0.5)]">
+              <a href={settings.heroGithubUrl.startsWith('http') ? settings.heroGithubUrl : `https://${settings.heroGithubUrl || profile.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-medium transition-all shadow-[0_0_20px_rgba(255,159,28,0.3)] hover:shadow-[0_0_30px_rgba(255,159,28,0.5)]">
                 <Github className="w-5 h-5" />
                 Ver GitHub
               </a>
-              <button className="flex items-center gap-2 px-6 py-3 bg-dark-700 hover:bg-dark-800 border border-white/10 text-white rounded-lg font-medium transition-all">
+              <a href={settings.heroGitlabUrl.startsWith('http') ? settings.heroGitlabUrl : `https://${settings.heroGitlabUrl}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-dark-700 hover:bg-dark-800 border border-white/10 text-white rounded-lg font-medium transition-all">
                 <Gitlab className="w-5 h-5" />
                 Ver GitLab
-              </button>
+              </a>
             </div>
 
             <div className="flex items-center gap-6 pt-4 text-sm text-gray-500 font-mono">
@@ -321,9 +336,9 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
               className="relative z-10 w-full flex items-center justify-center p-8"
             >
               <img
-                src={profile.imageUrl || "/images/willy.png"}
-                alt="Willy Tech Logo"
-                className="w-full max-w-[500px] h-auto object-contain drop-shadow-[0_0_50px_rgba(255,143,0,0.4)] rounded-2xl"
+                src={profile.imageUrl || "/images/photo-placeholder.png"}
+                alt={profile.name}
+                className="w-full max-w-[500px] h-auto object-cover drop-shadow-[0_0_50px_rgba(255,143,0,0.4)] rounded-2xl"
               />
 
               {/* Secondary Glow directly behind logo */}
@@ -349,24 +364,66 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
           transition={{ duration: 0.7 }}
           className="grid lg:grid-cols-2 gap-8 md:gap-12"
         >
-          <div className="space-y-6">
-            <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">Sobre mí</h2>
-            <div className="prose prose-invert text-gray-400 leading-relaxed">
-              <p>
-                Hola, soy un Ingeniero de Software Fullstack apasionado por los datos y la arquitectura de sistemas. Mi viaje comenzó con la curiosidad de cómo funcionan las cosas "bajo el capó" y evolucionó hacia la construcción de sistemas distribuidos complejos.
-              </p>
-              <p>
-                Me especializo en cerrar la brecha entre el análisis de datos complejos y las experiencias de usuario intuitivas. No solo escribo código; diseño soluciones que escalan, rinden y aportan valor real al negocio.
-              </p>
-              <p>
-                Cuando no estoy programando, estoy probablemente optimizando mi configuración de Linux, contribuyendo a proyectos Open Source o aprendiendo sobre las últimas tendencias en IA y Machine Learning.
-              </p>
+          <div className="bg-dark-800 border border-white/5 rounded-2xl p-4 relative overflow-hidden group">
+            {/* HUD Photo Frame */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
+              <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-orange-500"></div>
+              <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-orange-500"></div>
+              <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-orange-500"></div>
+              <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-orange-500"></div>
             </div>
 
+            <div className="relative aspect-square w-full bg-dark-900/50 rounded-xl overflow-hidden border border-white/5 flex items-center justify-center p-8">
+              <motion.div
+                animate={{
+                  y: [0, -10, 0],
+                  rotateZ: [0, 0.5, 0, -0.5, 0]
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="w-full h-full flex items-center justify-center p-8"
+              >
+                <img
+                  src={settings.aboutImage || "/images/willy.png"}
+                  alt="Willy Tech Logo"
+                  className="w-full h-full object-contain"
+                />
+              </motion.div>
 
+              {/* Scanline Effect */}
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-500/5 to-transparent h-20 w-full -translate-y-full animate-scan"></div>
+            </div>
+
+            {/* Photo Info / Tag */}
+            <div className="mt-4 flex items-center justify-between text-[10px] font-pixel text-orange-500/60 uppercase tracking-[0.2em]">
+              <span>Identity Verified</span>
+              <span>Ref: WC-2024</span>
+            </div>
           </div>
 
-          <div className="bg-dark-800 border border-white/5 rounded-2xl p-8 relative overflow-hidden">
+          <div className="space-y-6">
+            <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">{settings.aboutTitle}</h2>
+            <div className="prose prose-invert text-gray-400 leading-relaxed">
+              {settings.aboutDescription.map((p: string, i: number) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Skills Section */}
+        <motion.section
+          id="skills"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center"
+        >
+          <div className="order-2 lg:order-1 bg-dark-800 border border-white/5 rounded-2xl p-8 relative overflow-hidden h-full">
             <div className="absolute top-0 right-0 p-4 opacity-10">
               <Terminal className="w-32 h-32 text-white" />
             </div>
@@ -385,42 +442,10 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
               ))}
             </div>
           </div>
-        </motion.section>
-
-        {/* Skills Section */}
-        <motion.section
-          id="skills"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center"
-        >
-          <div className="order-2 lg:order-1 bg-dark-800 border border-white/5 rounded-2xl p-4 md:p-8 h-[300px] md:h-[400px] flex items-center justify-center">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="70%" data={skills}>
-                <PolarGrid stroke="#333" />
-                <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 12, fontFamily: 'JetBrains Mono' }} />
-                <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                <Radar
-                  name="Skills"
-                  dataKey="score"
-                  stroke="var(--color-orange-400)"
-                  strokeWidth={2}
-                  fill="var(--color-orange-500)"
-                  fillOpacity={0.4}
-                />
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#141414', borderColor: '#333', borderRadius: '8px', fontFamily: 'JetBrains Mono' }}
-                  itemStyle={{ color: '#FF9F1C' }}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
           <div className="order-1 lg:order-2 space-y-6">
-            <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">Arsenal Técnico</h2>
+            <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">{settings.arsenalTitle}</h2>
             <p className="text-gray-400 leading-relaxed">
-              Mi enfoque fullstack me permite entender el ciclo de vida completo del software. Desde el diseño de bases de datos optimizadas y pipelines de datos, hasta la creación de interfaces de usuario fluidas y reactivas.
+              {settings.arsenalDescription}
             </p>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
@@ -589,12 +614,12 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
         <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3 text-white">
             <span className="text-orange-500 font-pixel text-lg">{"<"}</span>
-            <span className="font-pixel text-sm uppercase tracking-widest leading-none mt-1">WILLY TECH</span>
+            <span className="font-pixel text-sm uppercase tracking-widest leading-none mt-1">{settings.footerText}</span>
             <span className="text-orange-500 font-pixel text-lg">{"/>"}</span>
           </div>
 
           <div className="text-sm text-gray-500 font-mono">
-            © {new Date().getFullYear()} Willy Tech. Todos los derechos reservados.
+            © {new Date().getFullYear()} {settings.footerText}. {settings.copyright}
           </div>
         </div>
       </footer>
@@ -614,8 +639,8 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
                 className="absolute bottom-4 right-full mr-4 bg-dark-800 border border-orange-500/20 shadow-[0_4px_20px_rgba(255,159,28,0.2)] rounded-2xl p-4 w-[280px] md:w-72 origin-bottom-right"
               >
                 <div className="text-sm text-gray-300 font-sans leading-relaxed">
-                  <span className="font-bold text-white mb-1 block">¿Hablamos de tu proyecto? 👋</span>
-                  Estoy disponible para ayudarte a construir esa solución tecnológica que tienes en mente.
+                  <span className="font-bold text-white mb-1 block">{settings.whatsappGreeting}</span>
+                  {settings.whatsappMessage}
                 </div>
                 {/* Small bubble tail */}
                 <div className="absolute -bottom-2 right-4 w-4 h-4 bg-dark-800 border-b border-r border-orange-500/20 transform rotate-45"></div>
@@ -624,7 +649,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
           </AnimatePresence>
 
           <a
-            href="https://wa.me/34600000000" // Replace with actual number
+            href={`https://wa.me/${settings.whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-3 bg-orange-600 hover:bg-orange-500 text-white rounded-full shadow-[0_0_20px_rgba(255,159,28,0.3)] hover:shadow-[0_0_30px_rgba(255,159,28,0.5)] transition-all group flex items-center justify-center animate-bounce-slow z-10"

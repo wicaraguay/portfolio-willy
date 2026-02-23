@@ -25,6 +25,7 @@ import { db, auth, storage } from '../lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { compressImage } from '../utils/image';
 
 const Notification = ({ message, type, onClose }: { message: string, type: 'success' | 'error', onClose: () => void }) => {
   useEffect(() => {
@@ -64,7 +65,29 @@ export default function AdminPanel() {
     skills: [],
     projects: [],
     experience: [],
-    stats: []
+    stats: [],
+    settings: {
+      siteName: 'WILLY TECH',
+      heroBadge: 'Willan Caraguay • Data Engineer',
+      heroTitle1: 'Fullstack',
+      heroTitle2: 'Developer',
+      heroGithubUrl: '',
+      heroGitlabUrl: '',
+      aboutTitle: 'Sobre mí',
+      aboutDescription: [
+        'Hola, soy un Ingeniero de Software Fullstack apasionado por los datos y la arquitectura de sistemas. Mi viaje comenzó con la curiosidad de cómo funcionan las cosas "bajo el capó" y evolucionó hacia la construcción de sistemas distribuidos complejos.',
+        'Me especializo en cerrar la brecha entre el análisis de datos complejos y las experiencias de usuario intuitivas. No solo escribo código; diseño soluciones que escalan, rinden y aportan valor real al negocio.',
+        'Cuando no estoy programando, estoy probablemente optimizando mi configuración de Linux, contribuyendo a proyectos Open Source o aprendiendo sobre las últimas tendencias en IA y Machine Learning.'
+      ],
+      aboutImage: '/images/willy.png',
+      arsenalTitle: 'Arsenal Técnico',
+      arsenalDescription: 'Mi enfoque fullstack me permite entender el ciclo de vida completo del software. Desde el diseño de bases de datos optimizadas y pipelines de datos, hasta la creación de interfaces de usuario fluidas y reactivas.',
+      whatsappNumber: '34600000000',
+      whatsappGreeting: '¿Hablamos de tu proyecto? 👋',
+      whatsappMessage: 'Estoy disponible para ayudarte a construir esa solución tecnológica que tienes en mente.',
+      footerText: 'Willy Tech',
+      copyright: 'Todos los derechos reservados.'
+    }
   });
 
   useEffect(() => {
@@ -75,17 +98,17 @@ export default function AdminPanel() {
 
     async function fetchData() {
       try {
-        const collections = ['profile', 'skills', 'projects', 'experience', 'stats'];
+        const collections = ['profile', 'skills', 'projects', 'experience', 'stats', 'settings'];
         const results: any = {};
         for (const name of collections) {
           const docRef = doc(db, 'content', name);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             const docData = docSnap.data();
-            results[name] = name === 'profile' ? docData : docData.data;
+            results[name] = (name === 'profile' || name === 'settings') ? docData : docData.data;
           }
         }
-        setData(results);
+        setData(prev => ({ ...prev, ...results }));
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -106,7 +129,7 @@ export default function AdminPanel() {
     try {
       const docRef = doc(db, 'content', section);
       const sectionData = data[section as keyof typeof data];
-      const payload = section === 'profile' ? sectionData : { data: sectionData };
+      const payload = (section === 'profile' || section === 'settings') ? sectionData : { data: sectionData };
       await setDoc(docRef, payload);
       showNotification(`${section.charAt(0).toUpperCase() + section.slice(1)} saved successfully!`, 'success');
     } catch (error) {
@@ -120,12 +143,16 @@ export default function AdminPanel() {
   const handleFileUpload = async (file: File, path: string, section: string, field: string, index?: number) => {
     setUploading(index !== undefined ? `${section}-${index}` : section);
     try {
-      const storageRef = ref(storage, `${path}/${Date.now()}-${file.name}`);
-      const snapshot = await uploadBytes(storageRef, file);
+      // Compress and convert to WebP
+      const compressedBlob = await compressImage(file);
+      const finalFile = compressedBlob instanceof File ? compressedBlob : new File([compressedBlob], file.name.replace(/\.[^/.]+$/, "") + ".webp", { type: 'image/webp' });
+
+      const storageRef = ref(storage, `${path}/${Date.now()}-${finalFile.name}`);
+      const snapshot = await uploadBytes(storageRef, finalFile);
       const url = await getDownloadURL(snapshot.ref);
 
       updateField(section, field, url, index);
-      showNotification('Imagen subida correctamente', 'success');
+      showNotification('Imagen subida y optimizada correctamente', 'success');
     } catch (error) {
       console.error(error);
       showNotification('Error al subir la imagen', 'error');
@@ -749,6 +776,199 @@ export default function AdminPanel() {
           </motion.div>
         );
 
+      case 'settings':
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-8"
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">Configuración General</h2>
+                <p className="text-gray-400 mt-1">Personaliza el contenido de todo el sitio.</p>
+              </div>
+              <button
+                onClick={() => handleSave('settings')}
+                disabled={saving}
+                className="flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-xl font-medium transition-all shadow-lg shadow-orange-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {saving ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save className="w-4 h-4" />}
+                {saving ? 'Guardando...' : 'Guardar Cambios'}
+              </button>
+            </div>
+
+            <div className="bg-dark-800 border border-white/5 rounded-2xl p-8 space-y-8">
+              {/* Branding & Hero */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-bold text-white border-b border-white/5 pb-2">Identidad y Hero</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Nombre del Sitio</label>
+                    <input
+                      value={(data.settings as any)?.siteName || ''}
+                      onChange={(e) => updateField('settings', 'siteName', e.target.value)}
+                      className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Badge Hero</label>
+                    <input
+                      value={(data.settings as any)?.heroBadge || ''}
+                      onChange={(e) => updateField('settings', 'heroBadge', e.target.value)}
+                      className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Título Hero (Línea 1)</label>
+                    <input
+                      value={(data.settings as any)?.heroTitle1 || ''}
+                      onChange={(e) => updateField('settings', 'heroTitle1', e.target.value)}
+                      className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Título Hero (Línea 2)</label>
+                    <input
+                      value={(data.settings as any)?.heroTitle2 || ''}
+                      onChange={(e) => updateField('settings', 'heroTitle2', e.target.value)}
+                      className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* About Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-bold text-white border-b border-white/5 pb-2">Sección "Sobre Mí"</h3>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Título Sección</label>
+                    <input
+                      value={(data.settings as any)?.aboutTitle || ''}
+                      onChange={(e) => updateField('settings', 'aboutTitle', e.target.value)}
+                      className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Párrafos (Uno por línea)</label>
+                    <textarea
+                      value={(data.settings as any)?.aboutDescription?.join('\n') || ''}
+                      onChange={(e) => updateField('settings', 'aboutDescription', e.target.value.split('\n'))}
+                      rows={6}
+                      className="w-full bg-dark-900 border border-white/10 rounded-xl p-4 text-white focus:border-orange-500 outline-none resize-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Imagen del Logo/About</label>
+                    <div className="flex items-center gap-4">
+                      <div className="w-20 h-20 rounded-xl bg-dark-900 border border-white/10 overflow-hidden flex items-center justify-center p-2 relative">
+                        <img src={(data.settings as any)?.aboutImage} className="max-w-full max-h-full object-contain" />
+                        {uploading === 'settings' && (
+                          <div className="absolute inset-0 bg-dark-900/80 flex items-center justify-center">
+                            <div className="w-5 h-5 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                          </div>
+                        )}
+                      </div>
+                      <label className="flex items-center gap-2 px-4 py-2 bg-dark-700 hover:bg-dark-600 text-white text-sm font-medium rounded-lg cursor-pointer transition-all border border-white/5">
+                        <Upload className="w-4 h-4" />
+                        Subir Imagen (Logo)
+                        <input
+                          type="file"
+                          className="hidden"
+                          accept="image/*"
+                          onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'settings', 'settings', 'aboutImage')}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Arsenal / WhatsApp */}
+              <div className="grid md:grid-cols-2 gap-10">
+                <div className="space-y-6">
+                  <h3 className="text-lg font-bold text-white border-b border-white/5 pb-2">WhatsApp</h3>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Número (con código país)</label>
+                      <input
+                        value={(data.settings as any)?.whatsappNumber || ''}
+                        onChange={(e) => updateField('settings', 'whatsappNumber', e.target.value)}
+                        className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                        placeholder="Ej. 34600000000"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Saludo (Título)</label>
+                      <input
+                        value={(data.settings as any)?.whatsappGreeting || ''}
+                        onChange={(e) => updateField('settings', 'whatsappGreeting', e.target.value)}
+                        className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Mensaje (Cuerpo)</label>
+                      <textarea
+                        value={(data.settings as any)?.whatsappMessage || ''}
+                        onChange={(e) => updateField('settings', 'whatsappMessage', e.target.value)}
+                        className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none resize-none"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <h3 className="text-lg font-bold text-white border-b border-white/5 pb-2">Arsenal Técnico</h3>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Título Arsenal</label>
+                      <input
+                        value={(data.settings as any)?.arsenalTitle || ''}
+                        onChange={(e) => updateField('settings', 'arsenalTitle', e.target.value)}
+                        className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Descripción Arsenal</label>
+                      <textarea
+                        value={(data.settings as any)?.arsenalDescription || ''}
+                        onChange={(e) => updateField('settings', 'arsenalDescription', e.target.value)}
+                        className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none resize-none"
+                        rows={4}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-bold text-white border-b border-white/5 pb-2">Pie de Página (Footer)</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Texto Branding</label>
+                    <input
+                      value={(data.settings as any)?.footerText || ''}
+                      onChange={(e) => updateField('settings', 'footerText', e.target.value)}
+                      className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Copyright / Derechos</label>
+                    <input
+                      value={(data.settings as any)?.copyright || ''}
+                      onChange={(e) => updateField('settings', 'copyright', e.target.value)}
+                      className="w-full bg-dark-900 border border-white/10 rounded-xl p-3 text-white focus:border-orange-500 outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        );
+
       default:
         return null;
     }
@@ -822,6 +1042,17 @@ export default function AdminPanel() {
           >
             <Briefcase className={`w-5 h-5 ${activeTab === 'experience' ? 'text-orange-400' : 'text-gray-500 group-hover:text-white'}`} />
             <span className="font-medium">Experiencia</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all group ${activeTab === 'settings'
+              ? 'bg-orange-600/10 text-orange-400 border border-orange-500/20'
+              : 'text-gray-400 hover:bg-dark-700 hover:text-white'
+              }`}
+          >
+            <Palette className={`w-5 h-5 ${activeTab === 'settings' ? 'text-orange-400' : 'text-gray-500 group-hover:text-white'}`} />
+            <span className="font-medium">Configuración</span>
           </button>
         </nav>
 

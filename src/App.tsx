@@ -23,7 +23,7 @@ function PortfolioWrapper() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const collections = ['profile', 'skills', 'projects', 'experience', 'stats'];
+        const collections = ['profile', 'skills', 'projects', 'experience', 'stats', 'settings'];
         const results: any = {};
 
         for (const name of collections) {
