@@ -110,14 +110,17 @@ export default function AdminPanel() {
       try {
         const collections = ['profile', 'skills', 'projects', 'experience', 'stats', 'settings'];
         const results: any = {};
-        for (const name of collections) {
-          const docRef = doc(db, 'content', name);
-          const docSnap = await getDoc(docRef);
+        // Fetch all collections in parallel
+        const promises = collections.map(name => getDoc(doc(db, 'content', name)));
+        const snapshots = await Promise.all(promises);
+
+        snapshots.forEach((docSnap, index) => {
           if (docSnap.exists()) {
+            const name = collections[index];
             const docData = docSnap.data();
             results[name] = (name === 'profile' || name === 'settings') ? docData : docData.data;
           }
-        }
+        });
         setData(prev => {
           const newData = { ...prev } as any;
           for (const key in results) {
