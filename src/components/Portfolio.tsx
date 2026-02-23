@@ -194,7 +194,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
 
 
   return (
-    <div className="min-h-screen bg-dark-900 text-gray-300 selection:bg-orange-500/30 selection:text-white">
+    <div className="min-h-screen bg-dark-900 text-gray-300 selection:bg-orange-500/30 selection:text-white overflow-x-hidden w-full">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-dark-900/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -278,9 +278,9 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
                 <Github className="w-5 h-5" />
                 Ver GitHub
               </a>
-              <a href={settings.heroGitlabUrl.startsWith('http') ? settings.heroGitlabUrl : `https://${settings.heroGitlabUrl}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-dark-700 hover:bg-dark-800 border border-white/10 text-white rounded-lg font-medium transition-all">
-                <Gitlab className="w-5 h-5" />
-                Ver GitLab
+              <a href="#contact" className="flex items-center gap-2 px-6 py-3 bg-dark-700 hover:bg-dark-800 border border-orange-500/30 hover:border-orange-500/60 text-orange-400 rounded-lg font-medium transition-all">
+                <Mail className="w-5 h-5" />
+                Contáctame
               </a>
             </div>
 
@@ -301,11 +301,11 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="relative flex items-center justify-center min-h-[400px] md:min-h-[500px] lg:min-h-[600px] order-1 lg:order-2"
+            className="relative flex items-center justify-center min-h-[400px] md:min-h-[500px] lg:min-h-[600px] order-1 lg:order-2 overflow-hidden"
           >
             {/* Massive Background Glow */}
             <div className="absolute inset-0 bg-orange-600/10 blur-[120px] rounded-full scale-150 animate-pulse"></div>
-            <div className="absolute inset-0 bg-orange-500/5 blur-[80px] rounded-full translate-x-12 -translate-y-12"></div>
+            <div className="absolute inset-0 bg-orange-500/5 blur-[80px] rounded-full -translate-y-8"></div>
 
             {/* HUD Corner Accents */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
@@ -647,14 +647,14 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
       <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 flex flex-col items-end gap-3 z-50">
 
         {/* WhatsApp Button with Greeting Message */}
-        <div className="relative">
+        <motion.div layout transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} className="relative">
           <AnimatePresence>
             {showWelcomeMessage && (
               <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                initial={{ opacity: 0, y: 12, scale: 0.92, filter: 'blur(4px)' }}
+                animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, y: 12, scale: 0.92, filter: 'blur(4px)' }}
+                transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="absolute bottom-[calc(100%+12px)] right-0 bg-dark-800 border border-orange-500/20 shadow-[0_4px_20px_rgba(255,159,28,0.2)] rounded-2xl p-4 origin-bottom-right"
                 style={{ width: 'min(260px, calc(100vw - 2rem))' }}
               >
@@ -667,11 +667,14 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
             )}
           </AnimatePresence>
 
-          <a
+          <motion.a
             href={`https://wa.me/${settings.whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-3 md:p-4 bg-orange-600 hover:bg-orange-500 active:bg-orange-700 text-white rounded-full shadow-[0_0_20px_rgba(255,159,28,0.3)] hover:shadow-[0_0_30px_rgba(255,159,28,0.5)] transition-all flex items-center justify-center z-10 select-none"
+            initial={{ opacity: 0, scale: 0.75, y: 20, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="p-3 md:p-4 bg-orange-600 hover:bg-orange-500 active:bg-orange-700 text-white rounded-full shadow-[0_0_20px_rgba(255,159,28,0.3)] hover:shadow-[0_0_30px_rgba(255,159,28,0.5)] transition-colors flex items-center justify-center z-10 select-none"
             aria-label="Contactar por WhatsApp"
             onMouseEnter={() => setShowWelcomeMessage(true)}
             onMouseLeave={() => setShowWelcomeMessage(false)}
@@ -687,19 +690,20 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path fillRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12c0 1.76.45 3.41 1.23 4.88L2 22l5.23-1.18c1.45.75 3.08 1.18 4.77 1.18 5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18.27c-1.53 0-3-.4-4.27-1.13l-3.08.69.7-2.92C4.58 15.42 4.15 13.76 4.15 12c0-4.33 3.52-7.85 7.85-7.85s7.85 3.52 7.85 7.85-3.52 7.85-7.85 7.85zm4.23-5.59c-.23-.12-1.38-.68-1.59-.76-.21-.08-.37-.12-.52.12s-.6.76-.74.92c-.14.16-.28.18-.51.06-1.13-.53-2.19-1.31-3.02-2.26-.64-.73-1.07-1.5-1.28-1.87-.07-.12-.01-.25.07-.35.08-.1.17-.2.25-.3s.11-.16.17-.26c.06-.11.03-.21-.01-.31-.05-.1-.52-1.25-.71-1.71-.19-.45-.38-.39-.52-.39h-.45c-.19 0-.5.07-.76.35-.26.28-1 .98-1 2.38s1.02 2.76 1.17 2.96c.14.2 2.01 3.06 4.86 4.29 1.14.49 1.8.72 2.45.92.74.24 1.42.2 1.96.12.59-.08 1.38-.56 1.57-1.11.19-.55.19-1.01.13-1.11-.06-.09-.22-.14-.45-.25z" clipRule="evenodd" />
             </svg>
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
 
         {/* Back to Top Button */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {showScrollTop && (
             <motion.button
-              initial={{ opacity: 0, y: 20, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.8 }}
-              transition={{ type: "spring", stiffness: 200, damping: 20 }}
+              key="scroll-top"
+              initial={{ opacity: 0, y: 16, scale: 0.75, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, y: 16, scale: 0.75, filter: 'blur(4px)' }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
               onClick={scrollToTop}
-              className="p-3 md:p-4 bg-orange-600 hover:bg-orange-500 active:bg-orange-700 text-white rounded-full shadow-[0_0_20px_rgba(255,159,28,0.3)] hover:shadow-[0_0_30px_rgba(255,159,28,0.5)] transition-all"
+              className="p-3 md:p-4 bg-orange-600 hover:bg-orange-500 active:bg-orange-700 text-white rounded-full shadow-[0_0_20px_rgba(255,159,28,0.3)] hover:shadow-[0_0_30px_rgba(255,159,28,0.5)] transition-colors"
               aria-label="Volver arriba"
             >
               <ChevronUp className="w-6 h-6" />
