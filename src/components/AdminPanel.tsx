@@ -3,7 +3,6 @@ import {
   Save,
   Plus,
   Trash2,
-  LayoutDashboard,
   User,
   Code2,
   Briefcase,
