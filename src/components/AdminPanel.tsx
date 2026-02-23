@@ -17,14 +17,16 @@ import {
   Palette,
   Camera,
   Upload,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Menu,
+  X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { db, auth, storage } from '../lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { compressImage } from '../utils/image';
 
 const Notification = ({ message, type, onClose }: { message: string, type: 'success' | 'error', onClose: () => void }) => {
@@ -54,6 +56,7 @@ export default function AdminPanel() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState<string | null>(null);
   const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [user, setUser] = useState<any>(null);
   const [email, setEmail] = useState('');
@@ -61,7 +64,15 @@ export default function AdminPanel() {
   const [authLoading, setAuthLoading] = useState(true);
 
   const [data, setData] = useState({
-    profile: {},
+    profile: {
+      name: "Willan Caraguay",
+      title: "Fullstack Developer & Data Engineer",
+      bio: "Especialista en desarrollo de sistemas escalables, pipelines de datos y experiencias digitales de alto impacto.",
+      email: "willan.caraguay@gmail.com",
+      github: "github.com/willytech",
+      linkedin: "linkedin.com/in/willan-caraguay",
+      imageUrl: "/images/willy.png"
+    },
     skills: [],
     projects: [],
     experience: [],
@@ -108,7 +119,17 @@ export default function AdminPanel() {
             results[name] = (name === 'profile' || name === 'settings') ? docData : docData.data;
           }
         }
-        setData(prev => ({ ...prev, ...results }));
+        setData(prev => {
+          const newData = { ...prev } as any;
+          for (const key in results) {
+            if (key === 'profile' || key === 'settings') {
+              newData[key] = { ...newData[key], ...results[key] };
+            } else {
+              newData[key] = results[key];
+            }
+          }
+          return newData;
+        });
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -161,6 +182,27 @@ export default function AdminPanel() {
     }
   };
 
+  const handleDeleteImage = async (url: string, section: string, field: string, index?: number) => {
+    if (!url) return;
+    setSaving(true);
+    try {
+      // Create a reference to the file to delete
+      const fileRef = ref(storage, url);
+      await deleteObject(fileRef);
+
+      // Remove from state
+      updateField(section, field, '', index);
+      showNotification('Imagen eliminada de Firebase', 'success');
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      showNotification('Error al eliminar la imagen o no existe en Storage', 'error');
+      // Still remove from state even if storage deletion fails (e.g. if it was a default placeholder)
+      updateField(section, field, '', index);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -182,13 +224,14 @@ export default function AdminPanel() {
 
   const updateField = (section: string, field: string, value: any, index?: number) => {
     setData(prev => {
-      const newData = { ...prev };
-      if (index !== undefined && Array.isArray(newData[section as keyof typeof newData])) {
-        // @ts-ignore
-        newData[section][index][field] = value;
+      const newData = { ...prev } as any;
+      if (Array.isArray(newData[section])) {
+        newData[section] = [...newData[section]];
+        if (index !== undefined) {
+          newData[section][index] = { ...newData[section][index], [field]: value };
+        }
       } else {
-        // @ts-ignore
-        newData[section][field] = value;
+        newData[section] = { ...newData[section], [field]: value };
       }
       return newData;
     });
@@ -196,8 +239,7 @@ export default function AdminPanel() {
 
   const addItem = (section: string, template: any) => {
     setData(prev => {
-      const newData = { ...prev };
-      // @ts-ignore
+      const newData = { ...prev } as any;
       newData[section] = [...newData[section], template];
       return newData;
     });
@@ -207,9 +249,8 @@ export default function AdminPanel() {
     if (!confirm('¿Estás seguro de que quieres eliminar este elemento?')) return;
 
     setData(prev => {
-      const newData = { ...prev };
-      // @ts-ignore
-      newData[section] = newData[section].filter((_, i) => i !== index);
+      const newData = { ...prev } as any;
+      newData[section] = newData[section].filter((_: any, i: number) => i !== index);
       return newData;
     });
   };
@@ -308,7 +349,7 @@ export default function AdminPanel() {
               <div className="flex flex-col items-center gap-6 pb-8 border-b border-white/5">
                 <div className="relative group">
                   <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-orange-500/20 group-hover:border-orange-500/50 transition-all bg-dark-900 flex items-center justify-center">
-                    {(data.profile as any).imageUrl ? (
+                    {(data.profile as any).imageUrl?.trim() ? (
                       <img src={(data.profile as any).imageUrl} alt="Perfil" className="w-full h-full object-cover" />
                     ) : (
                       <ImageIcon className="w-12 h-12 text-gray-700" />
@@ -319,7 +360,7 @@ export default function AdminPanel() {
                       </div>
                     )}
                   </div>
-                  <label className="absolute bottom-0 right-0 p-2 bg-orange-600 hover:bg-orange-500 text-white rounded-full cursor-pointer shadow-xl transition-all hover:scale-110">
+                  <label className="absolute bottom-0 right-0 p-2 bg-orange-600 hover:bg-orange-500 text-white rounded-full cursor-pointer shadow-xl transition-all hover:scale-110 z-10">
                     <Camera className="w-4 h-4" />
                     <input
                       type="file"
@@ -328,6 +369,16 @@ export default function AdminPanel() {
                       onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'profile', 'profile', 'imageUrl')}
                     />
                   </label>
+                  {(data.profile as any).imageUrl && (
+                    <button
+                      onClick={() => handleDeleteImage((data.profile as any).imageUrl, 'profile', 'imageUrl')}
+                      disabled={saving}
+                      className="absolute top-0 right-0 p-2 bg-red-500 hover:bg-red-400 text-white rounded-full transition-all hover:scale-110 shadow-xl opacity-0 group-hover:opacity-100 z-10 disabled:opacity-50"
+                      title="Borrar foto"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
                 <div className="text-center">
                   <h3 className="text-white font-medium">Foto de Perfil</h3>
@@ -861,25 +912,41 @@ export default function AdminPanel() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-orange-400 uppercase tracking-wider">Imagen del Logo/About</label>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 flex-wrap">
                       <div className="w-20 h-20 rounded-xl bg-dark-900 border border-white/10 overflow-hidden flex items-center justify-center p-2 relative">
-                        <img src={(data.settings as any)?.aboutImage} className="max-w-full max-h-full object-contain" />
+                        {(data.settings as any)?.aboutImage?.trim() ? (
+                          <img src={(data.settings as any).aboutImage} className="max-w-full max-h-full object-contain" />
+                        ) : (
+                          <ImageIcon className="w-8 h-8 text-gray-700" />
+                        )}
                         {uploading === 'settings' && (
                           <div className="absolute inset-0 bg-dark-900/80 flex items-center justify-center">
                             <div className="w-5 h-5 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
                           </div>
                         )}
                       </div>
-                      <label className="flex items-center gap-2 px-4 py-2 bg-dark-700 hover:bg-dark-600 text-white text-sm font-medium rounded-lg cursor-pointer transition-all border border-white/5">
-                        <Upload className="w-4 h-4" />
-                        Subir Imagen (Logo)
-                        <input
-                          type="file"
-                          className="hidden"
-                          accept="image/*"
-                          onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'settings', 'settings', 'aboutImage')}
-                        />
-                      </label>
+                      <div className="flex flex-col gap-2">
+                        <label className="flex items-center gap-2 px-4 py-2 bg-dark-700 hover:bg-dark-600 text-white text-sm font-medium rounded-lg cursor-pointer transition-all border border-white/5 w-fit">
+                          <Upload className="w-4 h-4" />
+                          Subir Imagen (Logo)
+                          <input
+                            type="file"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'settings', 'settings', 'aboutImage')}
+                          />
+                        </label>
+                        {(data.settings as any)?.aboutImage && (
+                          <button
+                            onClick={() => handleDeleteImage((data.settings as any).aboutImage, 'settings', 'aboutImage')}
+                            disabled={saving}
+                            className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 text-sm font-medium rounded-lg cursor-pointer transition-all border border-red-500/20 w-fit disabled:opacity-50"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Borrar Logo
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -975,7 +1042,7 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="min-h-screen bg-dark-900 flex font-sans">
+    <div className="min-h-screen bg-dark-900 flex flex-col md:flex-row font-sans">
       <AnimatePresence>
         {notification && (
           <Notification
@@ -986,8 +1053,31 @@ export default function AdminPanel() {
         )}
       </AnimatePresence>
 
+      {/* Mobile Header */}
+      <div className="md:hidden flex items-center justify-between p-4 border-b border-white/5 bg-dark-800 z-50 sticky top-0">
+        <div className="flex items-center gap-3 text-orange-500">
+          <span className="font-pixel text-lg">{'<'}</span>
+          <span className="font-pixel text-sm uppercase tracking-widest text-white">WILLY TECH</span>
+          <span className="font-pixel text-lg">{'>'}</span>
+        </div>
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 text-gray-400 hover:text-white transition-colors"
+        >
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-72 bg-dark-800 border-r border-white/5 flex flex-col sticky top-0 h-screen">
+      <aside className={`fixed md:sticky top-0 left-0 h-screen w-72 bg-dark-800 border-r border-white/5 flex flex-col z-50 transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="p-8 border-b border-white/5">
           <div className="flex items-center gap-3 text-orange-500 mb-3">
             <span className="font-pixel text-lg">{'<'}</span>
@@ -1001,7 +1091,7 @@ export default function AdminPanel() {
           <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-4 px-4">Gestión de Contenido</div>
 
           <button
-            onClick={() => setActiveTab('profile')}
+            onClick={() => { setActiveTab('profile'); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all group ${activeTab === 'profile'
               ? 'bg-orange-600/10 text-orange-400 border border-orange-500/20'
               : 'text-gray-400 hover:bg-dark-700 hover:text-white'
@@ -1012,7 +1102,7 @@ export default function AdminPanel() {
           </button>
 
           <button
-            onClick={() => setActiveTab('skills')}
+            onClick={() => { setActiveTab('skills'); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all group ${activeTab === 'skills'
               ? 'bg-orange-600/10 text-orange-400 border border-orange-500/20'
               : 'text-gray-400 hover:bg-dark-700 hover:text-white'
@@ -1023,7 +1113,7 @@ export default function AdminPanel() {
           </button>
 
           <button
-            onClick={() => setActiveTab('projects')}
+            onClick={() => { setActiveTab('projects'); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all group ${activeTab === 'projects'
               ? 'bg-orange-600/10 text-orange-400 border border-orange-500/20'
               : 'text-gray-400 hover:bg-dark-700 hover:text-white'
@@ -1034,7 +1124,7 @@ export default function AdminPanel() {
           </button>
 
           <button
-            onClick={() => setActiveTab('experience')}
+            onClick={() => { setActiveTab('experience'); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all group ${activeTab === 'experience'
               ? 'bg-orange-600/10 text-orange-400 border border-orange-500/20'
               : 'text-gray-400 hover:bg-dark-700 hover:text-white'
@@ -1045,7 +1135,7 @@ export default function AdminPanel() {
           </button>
 
           <button
-            onClick={() => setActiveTab('settings')}
+            onClick={() => { setActiveTab('settings'); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all group ${activeTab === 'settings'
               ? 'bg-orange-600/10 text-orange-400 border border-orange-500/20'
               : 'text-gray-400 hover:bg-dark-700 hover:text-white'
@@ -1068,7 +1158,7 @@ export default function AdminPanel() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-10 overflow-y-auto h-screen scrollbar-thin scrollbar-track-dark-900 scrollbar-thumb-dark-700">
+      <main className="flex-1 p-4 md:p-10 overflow-y-auto h-[calc(100vh-64px)] md:h-screen w-full scrollbar-thin scrollbar-track-dark-900 scrollbar-thumb-dark-700">
         <div className="max-w-5xl mx-auto pb-20">
           {renderContent()}
         </div>

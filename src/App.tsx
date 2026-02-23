@@ -31,7 +31,7 @@ function PortfolioWrapper() {
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             const docData = docSnap.data();
-            results[name] = name === 'profile' ? docData : docData.data;
+            results[name] = (name === 'profile' || name === 'settings') ? docData : docData.data;
           }
         }
 

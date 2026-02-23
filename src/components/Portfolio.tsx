@@ -22,7 +22,9 @@ import {
   Globe,
   ChevronUp,
   Menu,
-  X
+  X,
+  User,
+  Image as ImageIcon
 } from 'lucide-react';
 
 
@@ -97,26 +99,17 @@ const stats = [
 ];
 
 export default function Portfolio({ initialData }: { initialData?: any }) {
-  // Use initialData if provided, otherwise fallback to mock data (or empty)
-  const profile = initialData?.profile || {
-    name: "Fullstack Engineer",
-    title: "Data-Driven Engineer",
-    bio: "Especialista en diseño de arquitectura, desarrollo frontend/backend y procesamiento de datos.",
-    email: "hello@example.com",
-    linkedin: "linkedin.com/in/developer",
-    github: "github.com/developer"
+  const profileDefaults = {
+    name: "Willan Caraguay",
+    title: "Fullstack Developer & Data Engineer",
+    bio: "Especialista en desarrollo de sistemas escalables, pipelines de datos y experiencias digitales de alto impacto.",
+    email: "willan.caraguay@gmail.com",
+    github: "github.com/willytech",
+    linkedin: "linkedin.com/in/willan-caraguay",
+    imageUrl: "/images/willy.png"
   };
 
-  const skills = initialData?.skills?.length > 0 ? initialData.skills : skillData;
-  const projectsList = initialData?.projects?.length > 0 ? initialData.projects : projects;
-  const experienceList = initialData?.experience?.length > 0 ? initialData.experience : [
-    { role: "Senior Fullstack Engineer", company: "TechData Corp", period: "2023 - Present", description: "Liderando la migración a microservicios y optimizando pipelines de datos." },
-    { role: "Backend Developer", company: "CloudScale Inc", period: "2021 - 2023", description: "Desarrollo de APIs de alto rendimiento en Go y gestión de clusters Kubernetes." },
-    { role: "Frontend Developer", company: "CreativeWeb", period: "2019 - 2021", description: "Creación de dashboards interactivos con React y D3.js." }
-  ];
-  const statsList = initialData?.stats?.length > 0 ? initialData.stats : stats;
-
-  const settings = initialData?.settings || {
+  const settingsDefaults = {
     siteName: 'WILLY TECH',
     heroBadge: 'Willan Caraguay • Data Engineer',
     heroTitle1: 'Fullstack',
@@ -138,6 +131,17 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
     footerText: 'Willy Tech',
     copyright: 'Todos los derechos reservados.'
   };
+
+  const profile = { ...profileDefaults, ...initialData?.profile };
+  const settings = { ...settingsDefaults, ...initialData?.settings };
+  const skills = initialData?.skills?.length > 0 ? initialData.skills : skillData;
+  const projectsList = initialData?.projects?.length > 0 ? initialData.projects : projects;
+  const experienceList = initialData?.experience?.length > 0 ? initialData.experience : [
+    { role: "Senior Fullstack Engineer", company: "TechData Corp", period: "2023 - Present", description: "Liderando la migración a microservicios y optimizando pipelines de datos." },
+    { role: "Backend Developer", company: "CloudScale Inc", period: "2021 - 2023", description: "Desarrollo de APIs de alto rendimiento en Go y gestión de clusters Kubernetes." },
+    { role: "Frontend Developer", company: "CreativeWeb", period: "2019 - 2021", description: "Creación de dashboards interactivos con React y D3.js." }
+  ];
+  const statsList = initialData?.stats?.length > 0 ? initialData.stats : stats;
 
 
 
@@ -335,11 +339,17 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
               }}
               className="relative z-10 w-full flex items-center justify-center p-8"
             >
-              <img
-                src={profile.imageUrl || "/images/photo-placeholder.png"}
-                alt={profile.name}
-                className="w-full max-w-[500px] h-auto object-cover drop-shadow-[0_0_50px_rgba(255,143,0,0.4)] rounded-2xl"
-              />
+              {profile.imageUrl?.trim() ? (
+                <img
+                  src={profile.imageUrl}
+                  alt={profile.name}
+                  className="w-full max-w-[500px] h-auto object-cover drop-shadow-[0_0_50px_rgba(255,143,0,0.4)] rounded-2xl"
+                />
+              ) : (
+                <div className="w-full max-w-[300px] aspect-square flex items-center justify-center bg-dark-900 border border-white/10 rounded-full drop-shadow-[0_0_50px_rgba(255,143,0,0.4)]">
+                  <User className="w-32 h-32 text-orange-500/50" />
+                </div>
+              )}
 
               {/* Secondary Glow directly behind logo */}
               <div className="absolute inset-0 bg-orange-500/10 blur-3xl -z-10 rounded-full scale-75"></div>
@@ -384,13 +394,22 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="w-full h-full flex items-center justify-center p-8"
+                className="relative z-10 w-full h-full flex items-center justify-center p-8"
               >
-                <img
-                  src={settings.aboutImage || "/images/willy.png"}
-                  alt="Willy Tech Logo"
-                  className="w-full h-full object-contain"
-                />
+                {settings.aboutImage?.trim() ? (
+                  <img
+                    src={settings.aboutImage}
+                    alt="Willy Tech Logo"
+                    className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(255,143,0,0.4)]"
+                  />
+                ) : (
+                  <div className="w-full max-w-[200px] aspect-square flex items-center justify-center bg-dark-900 border border-white/10 rounded-full drop-shadow-[0_0_50px_rgba(255,143,0,0.4)]">
+                    <ImageIcon className="w-24 h-24 text-orange-500/50" />
+                  </div>
+                )}
+
+                {/* Secondary Glow directly behind logo */}
+                <div className="absolute inset-0 bg-orange-500/10 blur-3xl -z-10 rounded-full scale-75"></div>
               </motion.div>
 
               {/* Scanline Effect */}
