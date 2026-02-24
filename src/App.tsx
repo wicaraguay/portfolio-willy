@@ -18,16 +18,26 @@ export default function App() {
 }
 
 function PortfolioWrapper() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  // Inicializamos el estado SIN ESPERAR a que reaccione React (De forma totalmente síncrona)
+  const [data, setData] = useState<any>(() => {
+    try {
+      const cached = localStorage.getItem('portfolio_data_cache');
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // Si ya tenemos caché, ya NO cargamos ni mostramos pantallas negras
+  const [loading, setLoading] = useState(() => !localStorage.getItem('portfolio_data_cache'));
 
   useEffect(() => {
     async function fetchData() {
+      // Fetch fresh data from Firestore in the background
       try {
         const collections = ['profile', 'skills', 'projects', 'experience', 'stats', 'settings'];
         const results: any = {};
 
-        // Fetch all collections in parallel
         const promises = collections.map(name => getDoc(doc(db, 'content', name)));
         const snapshots = await Promise.all(promises);
 
@@ -39,45 +49,28 @@ function PortfolioWrapper() {
           }
         });
 
+        // 3. Update state with fresh data and update cache for next time
         setData(results);
+        localStorage.setItem('portfolio_data_cache', JSON.stringify(results));
       } catch (err) {
         console.error("Failed to fetch data from Firestore", err);
       } finally {
-        setLoading(false);
+        setLoading(false); // Failsafe in case cache was empty
       }
     }
 
     fetchData();
   }, []);
 
+  // Si está cargando LA PRIMERA VEZ, solo mostramos un fondo oscuro (0 delay)
+  if (loading) {
+    return <div className="min-h-screen bg-dark-900 w-full" />;
+  }
+
+  // Cuando ya hay data (Caché O Firebase), mostramos la web inmediatamente sin transiciones bloqueantes
   return (
-    <AnimatePresence mode="wait">
-      {loading ? (
-        <motion.div
-          key="loading"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="min-h-screen bg-dark-900 flex items-center justify-center text-orange-400 absolute inset-0 z-[100]"
-        >
-          <div className="animate-pulse flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-            <div className="font-mono">Loading System...</div>
-          </div>
-        </motion.div>
-      ) : (
-        <motion.div
-          key="content"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="min-h-screen bg-dark-900 w-full"
-        >
-          {/* If API fails or returns empty, Portfolio component will use its default mock data */}
-          {/* But we can pass the fetched data as props if available */}
-          <Portfolio initialData={data} />
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div className="min-h-screen bg-dark-900 w-full">
+      <Portfolio initialData={data} />
+    </div>
   );
 }

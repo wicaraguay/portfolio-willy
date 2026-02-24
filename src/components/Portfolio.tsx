@@ -341,6 +341,8 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
                 <img
                   src={profile.imageUrl}
                   alt={profile.name}
+                  fetchPriority="high"
+                  decoding="sync"
                   className="w-full max-w-[500px] h-auto object-cover drop-shadow-[0_0_50px_rgba(255,143,0,0.4)] rounded-2xl"
                 />
               ) : (
@@ -398,6 +400,8 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
                   <img
                     src={settings.aboutImage}
                     alt="Willy Tech Logo"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(255,143,0,0.4)]"
                   />
                 ) : (
@@ -516,7 +520,13 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-dark-700 rounded-lg overflow-hidden flex items-center justify-center text-gray-400 group-hover:text-orange-400 transition-colors border border-white/5 flex-shrink-0">
                       {project.imageUrl ? (
-                        <img src={project.imageUrl} alt={project.name} className="w-full h-full object-cover" />
+                        <img
+                          src={project.imageUrl}
+                          alt={project.name}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         project.type === 'Backend' ? <Server className="w-6 h-6" /> :
                           project.type === 'Frontend' ? <Layout className="w-6 h-6" /> :
