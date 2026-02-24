@@ -147,13 +147,9 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [isMenuOpen]);
+  const handleNavClick = () => {
+    setIsMenuOpen(false);
+  };
 
   useEffect(() => {
     // Show WhatsApp welcome message after 10 seconds
@@ -204,11 +200,11 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="#home" className="hover:text-white transition-colors">Inicio</a>
-            <a href="#about" className="hover:text-white transition-colors">Sobre mí</a>
-            <a href="#skills" className="hover:text-white transition-colors">Habilidades</a>
-            <a href="#projects" className="hover:text-white transition-colors">Proyectos</a>
-            <a href="#contact" className="px-4 py-2 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-md hover:bg-orange-500 hover:text-white transition-all">
+            <a href="#home" onClick={handleNavClick} className="hover:text-white transition-colors">Inicio</a>
+            <a href="#about" onClick={handleNavClick} className="hover:text-white transition-colors">Sobre mí</a>
+            <a href="#skills" onClick={handleNavClick} className="hover:text-white transition-colors">Habilidades</a>
+            <a href="#projects" onClick={handleNavClick} className="hover:text-white transition-colors">Proyectos</a>
+            <a href="#contact" onClick={handleNavClick} className="px-4 py-2 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-md hover:bg-orange-500 hover:text-white transition-all">
               Contáctame
             </a>
           </div>
@@ -232,11 +228,11 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
               className="md:hidden border-b border-white/5 bg-dark-900 overflow-hidden"
             >
               <div className="flex flex-col gap-4 p-6 text-base font-medium">
-                <a href="#home" onClick={() => setIsMenuOpen(false)} className="hover:text-orange-500 transition-colors">Inicio</a>
-                <a href="#about" onClick={() => setIsMenuOpen(false)} className="hover:text-orange-500 transition-colors">Sobre mí</a>
-                <a href="#skills" onClick={() => setIsMenuOpen(false)} className="hover:text-orange-500 transition-colors">Habilidades</a>
-                <a href="#projects" onClick={() => setIsMenuOpen(false)} className="hover:text-orange-500 transition-colors">Proyectos</a>
-                <a href="#contact" onClick={() => setIsMenuOpen(false)} className="py-3 text-center bg-orange-500 text-white rounded-lg">
+                <a href="#home" onClick={handleNavClick} className="hover:text-orange-500 transition-colors">Inicio</a>
+                <a href="#about" onClick={handleNavClick} className="hover:text-orange-500 transition-colors">Sobre mí</a>
+                <a href="#skills" onClick={handleNavClick} className="hover:text-orange-500 transition-colors">Habilidades</a>
+                <a href="#projects" onClick={handleNavClick} className="hover:text-orange-500 transition-colors">Proyectos</a>
+                <a href="#contact" onClick={handleNavClick} className="py-3 text-center bg-orange-500 text-white rounded-lg">
                   Contáctame
                 </a>
               </div>
