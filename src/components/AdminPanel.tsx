@@ -271,9 +271,9 @@ export default function AdminPanel() {
       >
         <div className="text-center mb-8">
           <div className="flex justify-center items-center gap-3 text-orange-500 mb-4">
-            <span className="font-pixel text-2xl">{'<'}</span>
-            <span className="font-pixel text-lg uppercase tracking-widest text-white">WILLY TECH</span>
-            <span className="font-pixel text-2xl">{'>'}</span>
+            <span className="font-orbitron font-bold text-2xl">{'<'}</span>
+            <span className="font-orbitron font-bold text-lg uppercase tracking-widest text-white">WILLY TECH</span>
+            <span className="font-orbitron font-bold text-2xl">{'>'}</span>
           </div>
           <h2 className="text-xl font-bold text-white">Panel de Administración</h2>
           <p className="text-gray-400 text-sm mt-2">Inicia sesión para gestionar tu portafolio</p>
@@ -332,7 +332,7 @@ export default function AdminPanel() {
           >
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">Configuración del Perfil</h2>
+                <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">Configuración del Perfil</h2>
                 <p className="text-gray-400 mt-1">Gestiona tu información personal y biografía.</p>
               </div>
               <button
@@ -475,7 +475,7 @@ export default function AdminPanel() {
           >
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">Proyectos</h2>
+                <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">Proyectos</h2>
                 <p className="text-gray-400 mt-1">Muestra tu mejor trabajo.</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
@@ -663,7 +663,7 @@ export default function AdminPanel() {
           >
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">Radar de Habilidades</h2>
+                <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">Radar de Habilidades</h2>
                 <p className="text-gray-400 mt-1">Define tus fortalezas técnicas.</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
@@ -740,7 +740,7 @@ export default function AdminPanel() {
           >
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">Experiencia</h2>
+                <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">Experiencia</h2>
                 <p className="text-gray-400 mt-1">Tu trayectoria profesional.</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
@@ -836,7 +836,7 @@ export default function AdminPanel() {
           >
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">Configuración General</h2>
+                <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">Configuración General</h2>
                 <p className="text-gray-400 mt-1">Personaliza el contenido de todo el sitio.</p>
               </div>
               <button
@@ -1056,9 +1056,9 @@ export default function AdminPanel() {
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 border-b border-white/5 bg-dark-800 z-50 sticky top-0">
         <div className="flex items-center gap-3 text-orange-500">
-          <span className="font-pixel text-lg">{'<'}</span>
-          <span className="font-pixel text-sm uppercase tracking-widest text-white">WILLY TECH</span>
-          <span className="font-pixel text-lg">{'>'}</span>
+          <span className="font-orbitron font-bold text-xl">{'<'}</span>
+          <span className="font-orbitron font-bold text-base uppercase tracking-widest text-white">WILLY TECH</span>
+          <span className="font-orbitron font-bold text-xl">{'>'}</span>
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -1080,9 +1080,9 @@ export default function AdminPanel() {
       <aside className={`fixed md:sticky top-0 left-0 h-screen w-72 bg-dark-800 border-r border-white/5 flex flex-col z-50 transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="p-8 border-b border-white/5">
           <div className="flex items-center gap-3 text-orange-500 mb-3">
-            <span className="font-pixel text-lg">{'<'}</span>
-            <span className="font-pixel text-sm uppercase tracking-widest text-white">WILLY TECH</span>
-            <span className="font-pixel text-lg">{'>'}</span>
+            <span className="font-orbitron font-bold text-xl">{'<'}</span>
+            <span className="font-orbitron font-bold text-base uppercase tracking-widest text-white">WILLY TECH</span>
+            <span className="font-orbitron font-bold text-xl">{'>'}</span>
           </div>
           <h1 className="text-xl font-medium text-gray-400 tracking-tight pl-1">Consola de Admin</h1>
         </div>

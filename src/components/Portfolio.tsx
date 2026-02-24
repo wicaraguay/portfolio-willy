@@ -198,10 +198,10 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-dark-900/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3 text-white font-pixel font-bold text-sm md:text-base tracking-tight">
-            <span className="text-orange-500 text-lg md:text-xl">{"<"}</span>
+          <div className="flex items-center gap-3 text-white font-orbitron font-bold text-base md:text-lg tracking-tight">
+            <span className="text-orange-500 text-xl md:text-2xl">{"<"}</span>
             {settings.siteName}
-            <span className="text-orange-500 text-lg md:text-xl">{"/>"}</span>
+            <span className="text-orange-500 text-xl md:text-2xl">{"/>"}</span>
           </div>
 
           {/* Desktop Nav */}
@@ -262,7 +262,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
                 <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
                 {settings.heroBadge}
               </div>
-              <h1 className="text-4xl md:text-6xl font-pixel tracking-widest leading-[1.3] drop-shadow-lg">
+              <h1 className="text-5xl md:text-7xl font-orbitron font-bold tracking-widest leading-[1.3] drop-shadow-lg">
                 <span className="text-white">{settings.heroTitle1}</span> <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-orange-500 to-orange-600">
                   {settings.heroTitle2}
@@ -424,7 +424,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
           </div>
 
           <div className="space-y-6">
-            <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">{settings.aboutTitle}</h2>
+            <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">{settings.aboutTitle}</h2>
             <div className="prose prose-invert text-gray-400 leading-relaxed">
               {settings.aboutDescription.map((p: string, i: number) => (
                 <p key={i}>{p}</p>
@@ -462,7 +462,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
             </div>
           </div>
           <div className="order-1 lg:order-2 space-y-6">
-            <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">{settings.arsenalTitle}</h2>
+            <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">{settings.arsenalTitle}</h2>
             <p className="text-gray-400 leading-relaxed">
               {settings.arsenalDescription}
             </p>
@@ -503,7 +503,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
         >
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide mb-4">Repositorios Destacados</h2>
+              <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase mb-4">Repositorios Destacados</h2>
               <p className="text-gray-400">Proyectos destacados de código abierto y arquitectura.</p>
             </div>
             <a href="#" className="flex items-center gap-2 text-sm text-orange-400 hover:text-orange-300 font-medium transition-colors">
@@ -568,7 +568,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
           className="grid lg:grid-cols-2 gap-12"
         >
           <div className="space-y-6">
-            <h2 className="text-2xl md:text-3xl font-pixel text-white tracking-wide">Hablemos</h2>
+            <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">Hablemos</h2>
             <p className="text-gray-400 leading-relaxed">
               ¿Tienes un proyecto interesante o un problema de datos complejo? Estoy siempre abierto a discutir nuevas oportunidades y colaboraciones técnicas.
             </p>
@@ -632,9 +632,9 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
       <footer className="border-t border-white/5 bg-dark-800 mt-20">
         <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3 text-white">
-            <span className="text-orange-500 font-pixel text-lg">{"<"}</span>
-            <span className="font-pixel text-sm uppercase tracking-widest leading-none mt-1">{settings.footerText}</span>
-            <span className="text-orange-500 font-pixel text-lg">{"/>"}</span>
+            <span className="text-orange-500 font-orbitron font-bold text-xl">{"<"}</span>
+            <span className="font-orbitron font-bold text-base uppercase tracking-widest leading-none mt-1">{settings.footerText}</span>
+            <span className="text-orange-500 font-orbitron font-bold text-xl">{"/>"}</span>
           </div>
 
           <div className="text-sm text-gray-500 font-mono">

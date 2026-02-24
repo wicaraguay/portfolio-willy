@@ -36,10 +36,18 @@
   src: url('./assets/fonts/QuizShow1976.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Saira SemiCondensed';
+  src: url('./assets/fonts/Saira SemiCondensed.woff2') format('woff2'),
+    url('./assets/fonts/Saira SemiCondensed.woff') format('woff');
+}
+
 @theme {
-  --font-sans: "Orbitron", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Orbitron", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Saira SemiCondensed", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Fira Code", ui-monospace, SFMono-Regular, monospace;
   --font-pixel: "Quiz Show", cursive;
+  --font-saira: "Saira SemiCondensed", sans-serif;
+  --font-orbitron: "Orbitron", sans-serif;
 
   /* Updated Orange/Yellow Gradient Palette */
   --color-orange-300: #FFD54F;
