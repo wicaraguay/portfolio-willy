@@ -24,6 +24,7 @@ import {
   User,
   Image as ImageIcon
 } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 
@@ -147,28 +148,47 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const navigate = useNavigate();
+  const { section } = useParams();
+
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     setIsMenuOpen(false);
 
-    // Pequeño retardo para permitir que el menú comience a cerrarse y no interfiera con el scroll en Chrome/Safari
-    setTimeout(() => {
-      const element = document.getElementById(targetId);
-      if (element) {
-        const headerOffset = 80;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+    // Navegar a la ruta limpia
+    const newPath = targetId === 'home' ? '/' : `/${targetId}`;
+    navigate(newPath);
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-
-        // Actualizar la URL sin saltos bruscos
-        window.history.pushState(null, '', `#${targetId}`);
-      }
-    }, 10);
+    // Scroll suave a la sección
+    scrollToSection(targetId);
   };
+
+  const scrollToSection = (targetId: string) => {
+    const element = document.getElementById(targetId);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Manejar el scroll inicial o cuando cambia la ruta
+  useEffect(() => {
+    if (section) {
+      // Necesitamos un pequeño delay para asegurar que el contenido esté renderizado
+      const timer = setTimeout(() => {
+        scrollToSection(section);
+      }, 100);
+      return () => clearTimeout(timer);
+    } else if (window.location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [section]);
 
   useEffect(() => {
     // Show WhatsApp welcome message after 10 seconds
@@ -198,6 +218,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
   }, []);
 
   const scrollToTop = () => {
+    navigate('/');
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
@@ -219,11 +240,11 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="#home" onClick={(e) => handleNavClick(e, 'home')} className="hover:text-white transition-colors">Inicio</a>
-            <a href="#about" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-white transition-colors">Sobre mí</a>
-            <a href="#skills" onClick={(e) => handleNavClick(e, 'skills')} className="hover:text-white transition-colors">Habilidades</a>
-            <a href="#projects" onClick={(e) => handleNavClick(e, 'projects')} className="hover:text-white transition-colors">Proyectos</a>
-            <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="px-4 py-2 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-md hover:bg-orange-500 hover:text-white transition-all">
+            <a href="/" onClick={(e) => handleNavClick(e, 'home')} className="hover:text-white transition-colors">Inicio</a>
+            <a href="/about" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-white transition-colors">Sobre mí</a>
+            <a href="/skills" onClick={(e) => handleNavClick(e, 'skills')} className="hover:text-white transition-colors">Habilidades</a>
+            <a href="/projects" onClick={(e) => handleNavClick(e, 'projects')} className="hover:text-white transition-colors">Proyectos</a>
+            <a href="/contact" onClick={(e) => handleNavClick(e, 'contact')} className="px-4 py-2 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-md hover:bg-orange-500 hover:text-white transition-all">
               Contáctame
             </a>
           </div>
@@ -247,11 +268,11 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
               className="md:hidden border-b border-white/5 bg-dark-900 overflow-hidden"
             >
               <div className="flex flex-col gap-4 p-6 text-base font-medium">
-                <a href="#home" onClick={(e) => handleNavClick(e, 'home')} className="hover:text-orange-500 transition-colors">Inicio</a>
-                <a href="#about" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-orange-500 transition-colors">Sobre mí</a>
-                <a href="#skills" onClick={(e) => handleNavClick(e, 'skills')} className="hover:text-orange-500 transition-colors">Habilidades</a>
-                <a href="#projects" onClick={(e) => handleNavClick(e, 'projects')} className="hover:text-orange-500 transition-colors">Proyectos</a>
-                <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="py-3 text-center bg-orange-500 text-white rounded-lg">
+                <a href="/" onClick={(e) => handleNavClick(e, 'home')} className="hover:text-orange-500 transition-colors">Inicio</a>
+                <a href="/about" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-orange-500 transition-colors">Sobre mí</a>
+                <a href="/skills" onClick={(e) => handleNavClick(e, 'skills')} className="hover:text-orange-500 transition-colors">Habilidades</a>
+                <a href="/projects" onClick={(e) => handleNavClick(e, 'projects')} className="hover:text-orange-500 transition-colors">Proyectos</a>
+                <a href="/contact" onClick={(e) => handleNavClick(e, 'contact')} className="py-3 text-center bg-orange-500 text-white rounded-lg">
                   Contáctame
                 </a>
               </div>
@@ -291,7 +312,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
                 <Github className="w-5 h-5" />
                 Ver GitHub
               </a>
-              <a href="#contact" className="flex items-center gap-2 px-6 py-3 bg-dark-700 hover:bg-dark-800 border border-orange-500/30 hover:border-orange-500/60 text-orange-400 rounded-lg font-medium transition-all">
+              <a href="/contact" onClick={(e) => handleNavClick(e, 'contact')} className="flex items-center gap-2 px-6 py-3 bg-dark-700 hover:bg-dark-800 border border-orange-500/30 hover:border-orange-500/60 text-orange-400 rounded-lg font-medium transition-all">
                 <Mail className="w-5 h-5" />
                 Contáctame
               </a>

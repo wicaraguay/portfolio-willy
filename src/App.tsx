@@ -11,6 +11,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PortfolioWrapper />} />
+        <Route path="/:section" element={<PortfolioWrapper />} />
         <Route path="/admin" element={<AdminPanel />} />
       </Routes>
     </BrowserRouter>
