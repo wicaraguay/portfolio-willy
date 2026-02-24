@@ -147,8 +147,27 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleNavClick = () => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
     setIsMenuOpen(false);
+
+    // Pequeño retardo para permitir que el menú comience a cerrarse y no interfiera con el scroll en Chrome/Safari
+    setTimeout(() => {
+      const element = document.getElementById(targetId);
+      if (element) {
+        const headerOffset = 80;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+
+        // Actualizar la URL sin saltos bruscos
+        window.history.pushState(null, '', `#${targetId}`);
+      }
+    }, 10);
   };
 
   useEffect(() => {
@@ -200,11 +219,11 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="#home" onClick={handleNavClick} className="hover:text-white transition-colors">Inicio</a>
-            <a href="#about" onClick={handleNavClick} className="hover:text-white transition-colors">Sobre mí</a>
-            <a href="#skills" onClick={handleNavClick} className="hover:text-white transition-colors">Habilidades</a>
-            <a href="#projects" onClick={handleNavClick} className="hover:text-white transition-colors">Proyectos</a>
-            <a href="#contact" onClick={handleNavClick} className="px-4 py-2 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-md hover:bg-orange-500 hover:text-white transition-all">
+            <a href="#home" onClick={(e) => handleNavClick(e, 'home')} className="hover:text-white transition-colors">Inicio</a>
+            <a href="#about" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-white transition-colors">Sobre mí</a>
+            <a href="#skills" onClick={(e) => handleNavClick(e, 'skills')} className="hover:text-white transition-colors">Habilidades</a>
+            <a href="#projects" onClick={(e) => handleNavClick(e, 'projects')} className="hover:text-white transition-colors">Proyectos</a>
+            <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="px-4 py-2 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-md hover:bg-orange-500 hover:text-white transition-all">
               Contáctame
             </a>
           </div>
@@ -228,11 +247,11 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
               className="md:hidden border-b border-white/5 bg-dark-900 overflow-hidden"
             >
               <div className="flex flex-col gap-4 p-6 text-base font-medium">
-                <a href="#home" onClick={handleNavClick} className="hover:text-orange-500 transition-colors">Inicio</a>
-                <a href="#about" onClick={handleNavClick} className="hover:text-orange-500 transition-colors">Sobre mí</a>
-                <a href="#skills" onClick={handleNavClick} className="hover:text-orange-500 transition-colors">Habilidades</a>
-                <a href="#projects" onClick={handleNavClick} className="hover:text-orange-500 transition-colors">Proyectos</a>
-                <a href="#contact" onClick={handleNavClick} className="py-3 text-center bg-orange-500 text-white rounded-lg">
+                <a href="#home" onClick={(e) => handleNavClick(e, 'home')} className="hover:text-orange-500 transition-colors">Inicio</a>
+                <a href="#about" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-orange-500 transition-colors">Sobre mí</a>
+                <a href="#skills" onClick={(e) => handleNavClick(e, 'skills')} className="hover:text-orange-500 transition-colors">Habilidades</a>
+                <a href="#projects" onClick={(e) => handleNavClick(e, 'projects')} className="hover:text-orange-500 transition-colors">Proyectos</a>
+                <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="py-3 text-center bg-orange-500 text-white rounded-lg">
                   Contáctame
                 </a>
               </div>
