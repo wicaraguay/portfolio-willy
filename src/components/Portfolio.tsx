@@ -219,7 +219,7 @@ export default function Portfolio({ initialData }: { initialData?: PortfolioData
             </AnimatePresence>
           </div>
           <a
-            href={`https://wa.me/${data.settings.whatsappNumber}`}
+            href={`https://api.whatsapp.com/send?phone=${data.settings.whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-4 bg-orange-600 text-white rounded-full shadow-2xl hover:bg-orange-500 transition-all hover:scale-110 shadow-orange-900/20"
