@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useAnimation, useMotionValue, useTransform, animate } from 'motion/react';
 import {
   Github,
   Terminal,
@@ -122,7 +122,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
       'Cuando no estoy programando, estoy probablemente optimizando mi configuración de Linux, contribuyendo a proyectos Open Source o aprendiendo sobre las últimas tendencias en IA y Machine Learning.'
     ],
     aboutImage: '/images/willy.png',
-    arsenalTitle: 'Arsenal Técnico',
+    arsenalTitle: 'Habilidades Tech',
     arsenalDescription: 'Mi enfoque fullstack me permite entender el ciclo de vida completo del software. Desde el diseño de bases de datos optimizadas y pipelines de datos, hasta la creación de interfaces de usuario fluidas y reactivas.',
     whatsappNumber: '34600000000',
     whatsappGreeting: '¿Hablamos de tu proyecto? 👋',
@@ -227,8 +227,61 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
 
 
 
+  const yPos = useMotionValue(0);
+  const yPosPct = useTransform(yPos, (v: number) => `${v}%`);
+  const [isPaused, setIsPaused] = useState(false);
+  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const animationRef = useRef<any>(null);
+
+  const startExperienceAnimation = (currentY = yPos.get()) => {
+    if (animationRef.current) animationRef.current.stop();
+
+    const targetY = -50;
+    // Si ya estamos muy cerca del final, reseteamos a 0
+    const startY = currentY <= -50 ? 0 : currentY;
+    if (startY === 0) yPos.set(0);
+
+    const distanceToTravel = Math.abs(targetY - startY);
+    const totalDistance = 50;
+    const duration = (distanceToTravel / totalDistance) * 30;
+
+    animationRef.current = animate(yPos, targetY, {
+      duration: duration,
+      ease: "linear",
+      onComplete: () => {
+        yPos.set(0);
+        startExperienceAnimation(0);
+      }
+    });
+  };
+
+  useEffect(() => {
+    startExperienceAnimation();
+    return () => {
+      if (animationRef.current) animationRef.current.stop();
+    };
+  }, []);
+
+  const resetIdleTimer = () => {
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    if (isPaused) {
+      idleTimerRef.current = setTimeout(() => {
+        setIsPaused(false);
+        startExperienceAnimation();
+      }, 2000);
+    }
+  };
+
+  const handleManualInteraction = () => {
+    if (animationRef.current) animationRef.current.stop();
+    setIsPaused(true);
+    resetIdleTimer();
+  };
+
   return (
-    <div className="min-h-screen bg-dark-900 text-gray-300 selection:bg-orange-500/30 selection:text-white overflow-x-hidden w-full">
+    <div className="min-h-screen bg-dark-900 text-gray-300 selection:bg-orange-500/30 selection:text-white overflow-x-hidden w-full"
+      onMouseMove={resetIdleTimer}
+      onTouchStart={resetIdleTimer}>
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-dark-900/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -480,7 +533,7 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
           transition={{ duration: 0.7 }}
           className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center"
         >
-          <div className="order-2 lg:order-1 bg-dark-800 border border-white/5 rounded-2xl p-8 relative overflow-hidden h-full">
+          <div className="order-1 lg:order-2 bg-dark-800 border border-white/5 rounded-2xl p-8 relative overflow-hidden h-full">
             <div className="absolute top-0 right-0 p-4 opacity-10">
               <Terminal className="w-32 h-32 text-white" />
             </div>
@@ -488,42 +541,149 @@ export default function Portfolio({ initialData }: { initialData?: any }) {
               <Terminal className="w-5 h-5 text-orange-400" />
               Experiencia Laboral
             </h3>
-            <div className="space-y-8 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[2px] before:bg-dark-700">
-              {experienceList.map((job: any, i: number) => (
-                <div key={i} className="relative pl-8">
-                  <div className="absolute left-0 top-1.5 w-4 h-4 rounded-full bg-dark-900 border-2 border-orange-500"></div>
-                  <div className="text-white font-medium">{job.role}</div>
-                  <div className="text-sm text-orange-400 mb-1">{job.company} • {job.period}</div>
-                  <div className="text-sm text-gray-500">{job.description || job.desc}</div>
-                </div>
-              ))}
+            <div className="relative h-[500px] mt-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] cursor-grab active:cursor-grabbing">
+              <motion.div
+                style={{ y: yPosPct }}
+                drag="y"
+                dragConstraints={{ top: -1000, bottom: 0 }}
+                onDragStart={handleManualInteraction}
+                onHoverStart={() => {
+                  if (animationRef.current) animationRef.current.stop();
+                  setIsPaused(true);
+                }}
+                onHoverEnd={resetIdleTimer}
+                className="space-y-8 pb-12"
+              >
+                {/* Duplicamos la lista para el efecto de scroll infinito */}
+                {[...experienceList, ...experienceList].map((job: any, i: number) => {
+                  const description = job.description || job.desc || '';
+                  const parts = description.split(/(?:\s+-\s+|\n-\s+|^-\s+)/).map(p => p.trim()).filter(p => p.length > 0);
+                  const startsWithDash = description.trim().startsWith('-');
+                  const intro = startsWithDash ? '' : parts[0];
+                  const tasks = startsWithDash ? parts : parts.slice(1);
+
+                  return (
+                    <div key={i} className="relative group bg-dark-800/40 p-8 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all select-none">
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-start gap-4">
+                          <div>
+                            <div className="text-xl font-orbitron font-bold text-white tracking-tight group-hover:text-orange-400 transition-colors uppercase">{job.role}</div>
+                            <div className="text-sm font-mono text-orange-400 mt-1 flex items-center gap-2">
+                              <span>{job.company}</span>
+                            </div>
+                          </div>
+                          <div className="text-[10px] font-pixel text-gray-500 border border-white/10 px-2 py-1 rounded bg-dark-900/50">
+                            {job.period}
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          {intro && (
+                            <p className="text-sm text-gray-400 leading-relaxed italic opacity-80">
+                              {intro}
+                            </p>
+                          )}
+                          {tasks.length > 0 && (
+                            <ul className="space-y-3">
+                              {tasks.map((task: string, idx: number) => (
+                                <li key={idx} className="text-sm text-gray-400 leading-relaxed flex items-start gap-3">
+                                  <ChevronRight className="w-3 h-3 mt-1 text-orange-500/50 flex-shrink-0" />
+                                  <span>{task}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
             </div>
           </div>
-          <div className="order-1 lg:order-2 space-y-6">
+          <div className="order-2 lg:order-1 space-y-6">
             <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">{settings.arsenalTitle}</h2>
             <p className="text-gray-400 leading-relaxed">
               {settings.arsenalDescription}
             </p>
             <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-dark-700 rounded-lg text-orange-400"><Server className="w-6 h-6" /></div>
+              <div className="flex items-start gap-4 p-2 rounded-xl hover:bg-white/5 transition-colors group/item">
+                <div className="p-3 bg-gradient-to-br from-orange-500/20 to-orange-600/5 border border-orange-500/20 rounded-lg text-orange-400 shadow-[0_0_15px_rgba(255,159,28,0.1)] group-hover/item:shadow-[0_0_20px_rgba(255,159,28,0.2)] transition-all">
+                  <Server className="w-6 h-6" />
+                </div>
                 <div>
                   <h4 className="text-white font-medium">Backend & Data</h4>
-                  <p className="text-sm text-gray-500">Node.js, Go, Python, PostgreSQL, Redis, Kafka</p>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { name: 'Node.js', icon: 'nodedotjs' },
+                      { name: 'Go', icon: 'go' },
+                      { name: 'Python', icon: 'python' },
+                      { name: 'PostgreSQL', icon: 'postgresql' },
+                      { name: 'Redis', icon: 'redis' },
+                      { name: 'Kafka', icon: 'apachekafka' }
+                    ].map((tech) => (
+                      <div key={tech.name} className="flex items-center gap-2 px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-md group/tech hover:border-orange-500/30 transition-all cursor-default" title={tech.name}>
+                        <img
+                          src={`https://cdn.simpleicons.org/${tech.icon}/${tech.icon === 'apachekafka' || tech.icon === 'nodedotjs' ? 'fff' : 'FF9F1C'}`}
+                          alt={tech.name}
+                          className="w-4 h-4 object-contain transition-transform group-hover/tech:scale-110"
+                        />
+                        <span className="text-[11px] font-mono text-gray-500 group-hover/tech:text-white transition-colors">{tech.name}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-dark-700 rounded-lg text-orange-400"><Layout className="w-6 h-6" /></div>
+              <div className="flex items-start gap-4 p-2 rounded-xl hover:bg-white/5 transition-colors group/item">
+                <div className="p-3 bg-gradient-to-br from-orange-500/20 to-orange-600/5 border border-orange-500/20 rounded-lg text-orange-400 shadow-[0_0_15px_rgba(255,159,28,0.1)] group-hover/item:shadow-[0_0_20px_rgba(255,159,28,0.2)] transition-all">
+                  <Layout className="w-6 h-6" />
+                </div>
                 <div>
                   <h4 className="text-white font-medium">Frontend</h4>
-                  <p className="text-sm text-gray-500">React, TypeScript, Tailwind CSS, Next.js</p>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { name: 'React', icon: 'react' },
+                      { name: 'TypeScript', icon: 'typescript' },
+                      { name: 'Tailwind', icon: 'tailwindcss' },
+                      { name: 'Next.js', icon: 'nextdotjs' }
+                    ].map((tech) => (
+                      <div key={tech.name} className="flex items-center gap-2 px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-md group/tech hover:border-orange-500/30 transition-all cursor-default" title={tech.name}>
+                        <img
+                          src={`https://cdn.simpleicons.org/${tech.icon}/${tech.icon === 'nextdotjs' ? 'fff' : 'FF9F1C'}`}
+                          alt={tech.name}
+                          className="w-4 h-4 object-contain transition-transform group-hover/tech:scale-110"
+                        />
+                        <span className="text-[11px] font-mono text-gray-500 group-hover/tech:text-white transition-colors">{tech.name}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-dark-700 rounded-lg text-orange-400"><Terminal className="w-6 h-6" /></div>
+              <div className="flex items-start gap-4 p-2 rounded-xl hover:bg-white/5 transition-colors group/item">
+                <div className="p-3 bg-gradient-to-br from-orange-500/20 to-orange-600/5 border border-orange-500/20 rounded-lg text-orange-400 shadow-[0_0_15px_rgba(255,159,28,0.1)] group-hover/item:shadow-[0_0_20px_rgba(255,159,28,0.2)] transition-all">
+                  <Terminal className="w-6 h-6" />
+                </div>
                 <div>
                   <h4 className="text-white font-medium">DevOps & Cloud</h4>
-                  <p className="text-sm text-gray-500">Docker, Kubernetes, AWS, CI/CD Pipelines</p>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { name: 'Docker', icon: 'docker' },
+                      { name: 'K8s', icon: 'kubernetes' },
+                      { name: 'AWS', icon: 'aws' },
+                      { name: 'CI/CD', icon: 'githubactions' }
+                    ].map((tech) => (
+                      <div key={tech.name} className="flex items-center gap-2 px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-md group/tech hover:border-orange-500/30 transition-all cursor-default" title={tech.name}>
+                        <img
+                          src={tech.name === 'AWS'
+                            ? "https://1000marcas.net/wp-content/uploads/2025/03/Amazon-Web-Services-Emblem.png"
+                            : `https://cdn.simpleicons.org/${tech.icon}/${tech.icon === 'githubactions' || tech.icon === 'aws' ? 'fff' : 'FF9F1C'}`}
+                          alt={tech.name}
+                          className="w-4 h-4 object-contain transition-transform group-hover/tech:scale-110"
+                        />
+                        <span className="text-[11px] font-mono text-gray-500 group-hover/tech:text-white transition-colors">{tech.name}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
