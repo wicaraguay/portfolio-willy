@@ -84,6 +84,38 @@ export const useAdmin = () => {
         }
     };
 
+    const uploadMultipleImages = async (files: FileList, path: string, section: keyof PortfolioData, field: string, index?: number) => {
+        setUploading(index !== undefined ? `${section}-${index}-gallery` : `${section}-gallery`);
+        try {
+            const uploadPromises = Array.from(files).map(file => firebaseService.uploadImage(file, path));
+            const urls = await Promise.all(uploadPromises);
+
+            setData(prev => {
+                if (!prev) return null;
+                const newData = { ...prev } as any;
+                if (Array.isArray(newData[section]) && index !== undefined) {
+                    newData[section] = [...newData[section]];
+                    const currentArray = newData[section][index][field] || [];
+                    newData[section][index] = {
+                        ...newData[section][index],
+                        [field]: [...currentArray, ...urls]
+                    };
+
+                    if (section === 'projects') {
+                        newData[section][index].updatedAt = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+                    }
+                }
+                return newData as PortfolioData;
+            });
+            showNotification(`${urls.length} imágenes subidas correctamente`, 'success');
+        } catch (error) {
+            console.error(error);
+            showNotification('Error al subir las imágenes', 'error');
+        } finally {
+            setUploading(null);
+        }
+    };
+
     const deleteImage = async (url: string, section: keyof PortfolioData, field: string, index?: number) => {
         if (!url) return;
         setSaving(true);
@@ -107,6 +139,11 @@ export const useAdmin = () => {
                 newData[section] = [...newData[section]];
                 if (index !== undefined) {
                     newData[section][index] = { ...newData[section][index], [field]: value };
+
+                    // Automáticamente actualizar la fecha de modificación si editamos un proyecto
+                    if (section === 'projects' && field !== 'updatedAt') {
+                        newData[section][index].updatedAt = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+                    }
                 }
             } else {
                 newData[section] = { ...newData[section], [field]: value };
@@ -145,6 +182,7 @@ export const useAdmin = () => {
         logout,
         saveSection,
         uploadImage,
+        uploadMultipleImages,
         deleteImage,
         updateField,
         addItem,

@@ -27,6 +27,8 @@ export interface Project {
     imageUrl?: string;
     githubUrl?: string;
     liveUrl?: string;
+    isPrivate?: boolean;
+    gallery?: string[];
 }
 
 export interface Experience {

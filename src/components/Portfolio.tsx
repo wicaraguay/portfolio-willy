@@ -49,7 +49,38 @@ const defaultData: PortfolioData = {
     copyright: 'Todos los derechos reservados.'
   },
   skills: [],
-  projects: [],
+  projects: [
+    {
+      id: "1",
+      name: "Client E-commerce (Private)",
+      description: "Plataforma de comercio electrónico de alto rendimiento con pasarelas de pago integradas y panel de administración personalizado.",
+      language: "TypeScript",
+      languageColor: "#3178c6",
+      stars: 0,
+      forks: 0,
+      updatedAt: "Hace 2 días",
+      type: "Fullstack",
+      isPrivate: true,
+      liveUrl: "https://example-client-ecommerce.com",
+      gallery: [
+        "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80",
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
+      ]
+    },
+    {
+      id: "2",
+      name: "Data Analytics Dashboard",
+      description: "Sistema open-source de visualización de datos en tiempo real procesando miles de eventos por segundo.",
+      language: "Python",
+      languageColor: "#3572A5",
+      stars: 124,
+      forks: 32,
+      updatedAt: "Hace 1 semana",
+      type: "Data",
+      isPrivate: false,
+      githubUrl: "https://github.com/willytech/analytics-dashboard"
+    }
+  ],
   experience: [
     { role: "Senior Fullstack Engineer", company: "TechData Corp", period: "2023 - Present", description: "Liderando la migración a microservicios." },
   ],
@@ -155,26 +186,27 @@ export default function Portfolio({ initialData }: { initialData?: PortfolioData
             default: { type: "spring", stiffness: 260, damping: 20 }
           }}
           className="relative flex items-center justify-center"
-          onMouseEnter={() => setShowWelcomeMessage(true)}
-          onMouseLeave={() => setShowWelcomeMessage(false)}
+          onMouseEnter={() => { if (!('ontouchstart' in window)) setShowWelcomeMessage(true); }}
+          onMouseLeave={() => { if (!('ontouchstart' in window)) setShowWelcomeMessage(false); }}
         >
-          <div className="absolute right-full mr-4 pointer-events-none hidden sm:block">
+          {/* Tooltip: above button on mobile, left of button on sm+ */}
+          <div className="absolute bottom-full mb-4 right-0 sm:bottom-auto sm:mb-0 sm:right-full sm:mr-4 pointer-events-none">
             <AnimatePresence>
               {showWelcomeMessage && (
                 <motion.div
-                  initial={{ opacity: 0, x: 20, scale: 0.8 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: 20, scale: 0.8 }}
-                  className="bg-dark-900/95 backdrop-blur-md text-white p-5 rounded-sm shadow-[0_0_40px_rgba(255,143,0,0.15)] border border-orange-500/40 min-w-[300px] max-w-[420px] relative mt-[-65px]"
+                  initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.8 }}
+                  className="bg-dark-900/95 backdrop-blur-md text-white p-3 sm:p-5 rounded-sm shadow-[0_0_40px_rgba(255,143,0,0.15)] border border-orange-500/40 min-w-[250px] sm:min-w-[300px] max-w-[300px] sm:max-w-[420px] relative sm:mt-[-65px]"
                 >
-                  <div className="flex flex-col gap-3 relative z-10 text-left">
-                    <div className="flex items-center gap-3 border-b border-orange-500/10 pb-3">
+                  <div className="flex flex-col gap-2 sm:gap-3 relative z-10 text-left">
+                    <div className="flex items-center gap-2 sm:gap-3 border-b border-orange-500/10 pb-2 sm:pb-3">
                       <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse flex-shrink-0"></span>
-                      <p className="text-orange-400 text-sm font-orbitron font-bold tracking-[0.2em] uppercase">
+                      <p className="text-orange-400 text-xs sm:text-sm font-orbitron font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase">
                         {data.settings.whatsappGreeting}
                       </p>
                     </div>
-                    <p className="text-[12px] text-gray-300 leading-relaxed font-mono italic tracking-wide">
+                    <p className="text-[11px] sm:text-[12px] text-gray-300 leading-relaxed font-mono italic tracking-wide">
                       {data.settings.whatsappMessage}
                     </p>
                   </div>

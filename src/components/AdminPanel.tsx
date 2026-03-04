@@ -28,6 +28,7 @@ export default function AdminPanel() {
     logout,
     saveSection,
     uploadImage,
+    uploadMultipleImages,
     deleteImage,
     updateField,
     addItem,
@@ -68,7 +69,7 @@ export default function AdminPanel() {
   const renderContent = () => {
     const commonProps = { data, saving, handleSave: saveSection, updateField };
     const listProps = { ...commonProps, addItem, removeItem };
-    const uploadProps = { ...commonProps, uploading, handleFileUpload: uploadImage };
+    const uploadProps = { ...commonProps, uploading, handleFileUpload: uploadImage, handleMultipleFileUpload: uploadMultipleImages };
 
     switch (activeTab) {
       case 'profile':
