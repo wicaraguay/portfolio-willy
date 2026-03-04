@@ -112,7 +112,7 @@ export default function Portfolio({ initialData }: { initialData?: PortfolioData
   useEffect(() => {
     const welcomeTimer = setTimeout(() => {
       setShowWelcomeMessage(true);
-      setTimeout(() => setShowWelcomeMessage(false), 12000);
+      setTimeout(() => setShowWelcomeMessage(false), 4000);
     }, 2000);
     return () => clearTimeout(welcomeTimer);
   }, []);
