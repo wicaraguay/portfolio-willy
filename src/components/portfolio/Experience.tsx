@@ -66,17 +66,17 @@ const Experience: React.FC<ExperienceProps> = ({ experienceList = [] }) => {
             transition={{ duration: 0.7 }}
             className="space-y-6"
         >
-            <h2 className="text-xl md:text-2xl font-orbitron font-bold text-white tracking-[0.2em] uppercase flex items-center gap-3">
+            <h2 className="text-xl md:text-2xl font-saira font-bold text-white uppercase flex items-center gap-3">
                 <Terminal className="w-5 h-5 text-orange-400" />
                 Experiencia Laboral
             </h2>
 
-            <div className="bg-dark-800 border border-white/5 rounded-2xl p-8 relative overflow-hidden">
+            <div className="bg-dark-800 border border-white/5 rounded-2xl p-4 sm:p-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 opacity-10">
                     <Terminal className="w-32 h-32 text-white" />
                 </div>
                 <div
-                    className="relative h-[500px] mt-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] cursor-grab active:cursor-grabbing"
+                    className="relative h-[350px] sm:h-[500px] mt-4 sm:mt-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] cursor-grab active:cursor-grabbing"
                     onMouseMove={resetIdleTimer}
                     onTouchStart={resetIdleTimer}
                 >
@@ -100,11 +100,11 @@ const Experience: React.FC<ExperienceProps> = ({ experienceList = [] }) => {
                             const tasks = startsWithDash ? parts : parts.slice(1);
 
                             return (
-                                <div key={i} className="relative group bg-dark-800/40 p-8 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all select-none">
+                                <div key={i} className="relative group bg-dark-800/40 p-4 sm:p-8 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all select-none">
                                     <div className="space-y-4">
-                                        <div className="flex justify-between items-start gap-4">
+                                        <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-4">
                                             <div>
-                                                <div className="text-xl font-orbitron font-bold text-white tracking-tight group-hover:text-orange-400 transition-colors uppercase">{job.role}</div>
+                                                <div className="text-base sm:text-xl font-orbitron font-bold text-white tracking-tight group-hover:text-orange-400 transition-colors uppercase">{job.role}</div>
                                                 <div className="text-sm font-mono text-orange-400 mt-1 flex items-center gap-2">
                                                     <span>{job.company}</span>
                                                 </div>

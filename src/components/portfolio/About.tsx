@@ -15,7 +15,7 @@ const About: React.FC<AboutProps> = ({ settings }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7 }}
-            className="grid lg:grid-cols-2 gap-8 md:gap-12"
+            className="grid md:grid-cols-2 gap-8 md:gap-12"
         >
             <div className="bg-dark-800 border border-white/5 rounded-2xl p-4 relative overflow-hidden group">
                 <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
@@ -66,7 +66,7 @@ const About: React.FC<AboutProps> = ({ settings }) => {
             </div>
 
             <div className="space-y-6">
-                <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.2em] uppercase flex items-center gap-3">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.15em] sm:tracking-[0.2em] uppercase flex items-center gap-3">
                     <User className="w-6 h-6 text-orange-400" />
                     {settings.aboutTitle}
                 </h2>

@@ -19,7 +19,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
         >
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.2em] uppercase flex items-center gap-3 mb-4">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.15em] sm:tracking-[0.2em] uppercase flex items-center gap-3 mb-4">
                         <Rocket className="w-6 h-6 text-orange-400" />
                         Repositorios Destacados
                     </h2>
@@ -32,7 +32,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
 
             <div className="grid md:grid-cols-2 gap-6">
                 {projects.map((project) => (
-                    <div key={project.id} className="group bg-dark-800 border border-white/10 rounded-xl p-6 hover:border-orange-500/50 transition-all hover:shadow-[0_4px_20px_rgba(255,159,28,0.1)] flex flex-col h-full">
+                    <div key={project.id} className="group bg-dark-800 border border-white/10 rounded-xl p-4 sm:p-6 hover:border-orange-500/50 transition-all hover:shadow-[0_4px_20px_rgba(255,159,28,0.1)] flex flex-col h-full">
                         <div className="flex items-start justify-between mb-4">
                             <div className="flex items-center gap-3">
                                 <div className="w-12 h-12 bg-dark-700 rounded-lg overflow-hidden flex items-center justify-center text-gray-400 group-hover:text-orange-400 transition-colors border border-white/5 flex-shrink-0">
@@ -57,7 +57,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
                             {project.description}
                         </p>
 
-                        <div className="flex items-center gap-6 text-xs text-gray-500 font-mono mt-auto pt-4 border-t border-white/5">
+                        <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs text-gray-500 font-mono mt-auto pt-4 border-t border-white/5">
                             <div className="flex items-center gap-1.5">
                                 <span className="w-3 h-3 rounded-full" style={{ backgroundColor: project.languageColor || '#FF9F1C' }}></span>
                                 {project.language}

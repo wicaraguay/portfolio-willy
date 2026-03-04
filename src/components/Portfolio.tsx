@@ -130,11 +130,11 @@ export default function Portfolio({ initialData }: { initialData?: PortfolioData
         handleNavClick={handleNavClick}
       />
 
-      <main className="pt-24 pb-20 px-6 max-w-7xl mx-auto space-y-20 md:space-y-32">
+      <main className="pt-20 pb-16 px-4 md:px-6 max-w-7xl mx-auto space-y-16 md:space-y-32">
         <Hero profile={data.profile} settings={data.settings} handleNavClick={handleNavClick} />
         <About settings={data.settings} />
 
-        <section id="skills" className="grid lg:grid-cols-2 gap-12 items-start">
+        <section id="skills" className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
           <Skills settings={data.settings} />
           <Experience experienceList={data.experience} />
         </section>
@@ -144,7 +144,7 @@ export default function Portfolio({ initialData }: { initialData?: PortfolioData
       </main>
 
       {/* Floating UI Elements */}
-      <div className="fixed bottom-8 right-8 z-40 flex flex-col items-center gap-4">
+      <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-40 flex flex-col items-center gap-4">
         {/* WhatsApp Button (Entry animation on mount) */}
         <motion.div
           layout
@@ -158,7 +158,7 @@ export default function Portfolio({ initialData }: { initialData?: PortfolioData
           onMouseEnter={() => setShowWelcomeMessage(true)}
           onMouseLeave={() => setShowWelcomeMessage(false)}
         >
-          <div className="absolute right-full mr-4 pointer-events-none">
+          <div className="absolute right-full mr-4 pointer-events-none hidden sm:block">
             <AnimatePresence>
               {showWelcomeMessage && (
                 <motion.div
@@ -222,7 +222,7 @@ export default function Portfolio({ initialData }: { initialData?: PortfolioData
         </AnimatePresence>
       </div>
 
-      <footer className="py-12 px-6 border-t border-white/5 bg-dark-950">
+      <footer className="py-8 md:py-12 px-4 md:px-6 border-t border-white/5 bg-dark-950">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3 text-white font-orbitron font-bold text-base md:text-lg tracking-tight">
             <span className="text-orange-500 text-xl md:text-2xl">{"<"}</span>

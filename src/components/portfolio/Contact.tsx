@@ -15,11 +15,11 @@ const Contact: React.FC<ContactProps> = ({ profile }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7 }}
-            className="grid lg:grid-cols-2 gap-12 items-start"
+            className="grid md:grid-cols-2 gap-8 md:gap-12 items-start"
         >
             <div className="space-y-8">
                 <div className="space-y-4">
-                    <h2 className="text-3xl md:text-4xl font-orbitron font-extrabold text-white tracking-[0.2em] uppercase leading-tight flex items-center gap-3">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-extrabold text-white tracking-[0.15em] sm:tracking-[0.2em] uppercase leading-tight flex items-center gap-3">
                         <Mail className="w-6 h-6 text-orange-400" />
                         Hablemos
                     </h2>
@@ -50,7 +50,7 @@ const Contact: React.FC<ContactProps> = ({ profile }) => {
                 </div>
             </div>
 
-            <div className="bg-dark-900/60 backdrop-blur-md border border-white/5 rounded-2xl p-8 shadow-2xl relative overflow-hidden group">
+            <div className="bg-dark-900/60 backdrop-blur-md border border-white/5 rounded-2xl p-4 sm:p-8 shadow-2xl relative overflow-hidden group">
                 {/* HUD Decorative Corners */}
                 <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-40">
                     <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-orange-500/50"></div>
@@ -140,9 +140,9 @@ const ContactMethod: React.FC<ContactMethodProps> = ({ icon, label, value, href 
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.02, x: 5 }}
-        className="flex items-center gap-5 p-5 bg-dark-900/40 backdrop-blur-md border border-white/5 rounded-xl hover:border-orange-500/40 hover:bg-dark-900/60 transition-all group shadow-lg hover:shadow-orange-500/5"
+        className="flex items-center gap-3 sm:gap-5 p-3 sm:p-5 bg-dark-900/40 backdrop-blur-md border border-white/5 rounded-xl hover:border-orange-500/40 hover:bg-dark-900/60 transition-all group shadow-lg hover:shadow-orange-500/5"
     >
-        <div className="w-14 h-14 flex items-center justify-center bg-dark-950/80 rounded-xl text-orange-500 border border-white/10 group-hover:border-orange-500/50 group-hover:text-orange-400 group-hover:shadow-[0_0_20px_rgba(255,143,0,0.2)] transition-all duration-300">
+        <div className="w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center bg-dark-950/80 rounded-xl text-orange-500 border border-white/10 group-hover:border-orange-500/50 group-hover:text-orange-400 group-hover:shadow-[0_0_20px_rgba(255,143,0,0.2)] transition-all duration-300 flex-shrink-0">
             {React.cloneElement(icon as React.ReactElement, { className: "w-6 h-6" })}
         </div>
         <div className="space-y-1">

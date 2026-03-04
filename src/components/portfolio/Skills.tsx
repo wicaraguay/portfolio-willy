@@ -16,7 +16,7 @@ const Skills: React.FC<SkillsProps> = ({ settings }) => {
             transition={{ duration: 0.7 }}
             className="space-y-6"
         >
-            <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.2em] uppercase flex items-center gap-3">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.15em] sm:tracking-[0.2em] uppercase flex items-center gap-3">
                 <Cpu className="w-6 h-6 text-orange-400" />
                 {settings.arsenalTitle}
             </h2>
@@ -68,7 +68,7 @@ interface SkillCategoryProps {
 }
 
 const SkillCategory: React.FC<SkillCategoryProps> = ({ icon, title, techs }) => (
-    <div className="flex items-start gap-4 p-2 rounded-xl hover:bg-white/5 transition-colors group/item">
+    <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 p-2 rounded-xl hover:bg-white/5 transition-colors group/item">
         <div className="p-3 bg-gradient-to-br from-orange-500/20 to-orange-600/5 border border-orange-500/20 rounded-lg text-orange-400 shadow-[0_0_15px_rgba(255,159,28,0.1)] group-hover/item:shadow-[0_0_20px_rgba(255,159,28,0.2)] transition-all">
             {icon}
         </div>

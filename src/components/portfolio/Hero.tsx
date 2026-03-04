@@ -11,7 +11,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ profile, settings, handleNavClick }) => {
     return (
-        <section id="home" className="grid lg:grid-cols-2 gap-12 items-center min-h-[70vh]">
+        <section id="home" className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center min-h-[50vh] md:min-h-[70vh]">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -23,23 +23,23 @@ const Hero: React.FC<HeroProps> = ({ profile, settings, handleNavClick }) => {
                         <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
                         {settings.heroBadge}
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-orbitron font-bold tracking-widest leading-[1.3] drop-shadow-lg">
+                    <h1 className="text-3xl sm:text-5xl md:text-7xl font-orbitron font-bold tracking-widest leading-[1.3] drop-shadow-lg">
                         <span className="text-white">{settings.heroTitle1}</span> <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-orange-500 to-orange-600">
                             {settings.heroTitle2}
                         </span>
                     </h1>
-                    <p className="text-lg text-gray-400 max-w-xl leading-relaxed whitespace-pre-line">
+                    <p className="text-base sm:text-lg text-gray-400 max-w-xl leading-relaxed whitespace-pre-line">
                         {profile.bio}
                     </p>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4">
-                    <a href={settings.heroGithubUrl.startsWith('http') ? settings.heroGithubUrl : `https://${settings.heroGithubUrl || profile.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-medium transition-all shadow-[0_0_20px_rgba(255,159,28,0.3)] hover:shadow-[0_0_30px_rgba(255,159,28,0.5)]">
+                <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+                    <a href={settings.heroGithubUrl.startsWith('http') ? settings.heroGithubUrl : `https://${settings.heroGithubUrl || profile.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-medium transition-all shadow-[0_0_20px_rgba(255,159,28,0.3)] hover:shadow-[0_0_30px_rgba(255,159,28,0.5)]">
                         <Github className="w-5 h-5" />
                         Ver GitHub
                     </a>
-                    <a href="/contact" onClick={(e) => handleNavClick(e, 'contact')} className="flex items-center gap-2 px-6 py-3 bg-dark-700 hover:bg-dark-800 border border-orange-500/30 hover:border-orange-500/60 text-orange-400 rounded-lg font-medium transition-all">
+                    <a href="/contact" onClick={(e) => handleNavClick(e, 'contact')} className="flex items-center justify-center gap-2 px-6 py-3 bg-dark-700 hover:bg-dark-800 border border-orange-500/30 hover:border-orange-500/60 text-orange-400 rounded-lg font-medium transition-all">
                         <Mail className="w-5 h-5" />
                         Contáctame
                     </a>
@@ -61,7 +61,7 @@ const Hero: React.FC<HeroProps> = ({ profile, settings, handleNavClick }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
-                className="relative flex items-center justify-center min-h-[400px] md:min-h-[500px] lg:min-h-[600px] order-1 lg:order-2 overflow-hidden"
+                className="relative flex items-center justify-center min-h-[280px] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[600px] order-1 lg:order-2 overflow-hidden"
             >
                 {/* Massive Background Glow */}
                 <div className="absolute inset-0 bg-orange-600/10 blur-[120px] rounded-full scale-150 animate-pulse"></div>
@@ -103,7 +103,7 @@ const Hero: React.FC<HeroProps> = ({ profile, settings, handleNavClick }) => {
                 </motion.div>
 
                 {/* Decorative Labels at the bottom of the card */}
-                <div className="absolute bottom-4 left-8 right-8 flex justify-between items-center text-[10px] font-mono tracking-widest text-orange-500/80 uppercase pointer-events-none">
+                <div className="absolute bottom-4 left-4 right-4 sm:left-8 sm:right-8 flex justify-between items-center text-[8px] sm:text-[10px] font-mono tracking-widest text-orange-500/80 uppercase pointer-events-none">
                     <div className="flex items-center gap-2">
                         <span>IDENTITY VERIFIED</span>
                     </div>
