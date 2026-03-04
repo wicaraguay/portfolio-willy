@@ -29,7 +29,6 @@ const Skills: React.FC<SkillsProps> = ({ settings }) => {
                     title="Backend & Data"
                     techs={[
                         { name: 'Node.js', icon: 'nodedotjs' },
-                        { name: 'Go', icon: 'go' },
                         { name: 'Python', icon: 'python' },
                         { name: 'PostgreSQL', icon: 'postgresql' },
                         { name: 'Redis', icon: 'redis' },
