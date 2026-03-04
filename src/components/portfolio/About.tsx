@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Image as ImageIcon } from 'lucide-react';
+import { Image as ImageIcon, User } from 'lucide-react';
 import { Settings } from '../../types';
 
 interface AboutProps {
@@ -66,11 +66,18 @@ const About: React.FC<AboutProps> = ({ settings }) => {
             </div>
 
             <div className="space-y-6">
-                <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">{settings.aboutTitle}</h2>
-                <div className="prose prose-invert text-gray-400 leading-relaxed">
-                    {settings.aboutDescription.map((p, i) => (
-                        <p key={i}>{p}</p>
-                    ))}
+                <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.2em] uppercase flex items-center gap-3">
+                    <User className="w-6 h-6 text-orange-400" />
+                    {settings.aboutTitle}
+                </h2>
+                <div className="space-y-4 text-gray-400 leading-relaxed">
+                    {Array.isArray(settings.aboutDescription) ? (
+                        settings.aboutDescription.map((p, i) => (
+                            <p key={i}>{p}</p>
+                        ))
+                    ) : (
+                        <p>{settings.aboutDescription || ''}</p>
+                    )}
                 </div>
             </div>
         </motion.section>

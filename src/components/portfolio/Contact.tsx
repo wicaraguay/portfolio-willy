@@ -19,7 +19,8 @@ const Contact: React.FC<ContactProps> = ({ profile }) => {
         >
             <div className="space-y-8">
                 <div className="space-y-4">
-                    <h2 className="text-3xl md:text-4xl font-orbitron font-extrabold text-white tracking-[0.2em] uppercase leading-tight">
+                    <h2 className="text-3xl md:text-4xl font-orbitron font-extrabold text-white tracking-[0.2em] uppercase leading-tight flex items-center gap-3">
+                        <Mail className="w-6 h-6 text-orange-400" />
                         Hablemos
                     </h2>
                     <p className="text-gray-500 text-sm leading-relaxed max-w-md font-medium">

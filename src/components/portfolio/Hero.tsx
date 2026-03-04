@@ -29,7 +29,7 @@ const Hero: React.FC<HeroProps> = ({ profile, settings, handleNavClick }) => {
                             {settings.heroTitle2}
                         </span>
                     </h1>
-                    <p className="text-lg text-gray-400 max-w-xl leading-relaxed">
+                    <p className="text-lg text-gray-400 max-w-xl leading-relaxed whitespace-pre-line">
                         {profile.bio}
                     </p>
                 </div>

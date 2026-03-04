@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ChevronRight, Layout, Server, Activity, Database } from 'lucide-react';
+import { ChevronRight, Layout, Server, Activity, Database, Rocket } from 'lucide-react';
 import { Project as ProjectType } from '../../types';
 
 interface ProjectsProps {
@@ -19,7 +19,10 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
         >
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase mb-4">Repositorios Destacados</h2>
+                    <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.2em] uppercase flex items-center gap-3 mb-4">
+                        <Rocket className="w-6 h-6 text-orange-400" />
+                        Repositorios Destacados
+                    </h2>
                     <p className="text-gray-400">Proyectos destacados de código abierto y arquitectura.</p>
                 </div>
                 <a href="#" className="flex items-center gap-2 text-sm text-orange-400 hover:text-orange-300 font-medium transition-colors">

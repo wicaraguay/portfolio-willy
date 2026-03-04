@@ -29,7 +29,6 @@ const SettingsEditor: React.FC<SettingsEditorProps> = ({
         { label: 'Título Hero 2', field: 'heroTitle2' },
         { label: 'GitHub URL (Hero)', field: 'heroGithubUrl' },
         { label: 'GitLab URL (Hero)', field: 'heroGitlabUrl' },
-        { label: 'Título Sobre Mí', field: 'aboutTitle' },
         { label: 'Título Arsenal', field: 'arsenalTitle' },
         { label: 'Descripción Arsenal', field: 'arsenalDescription', type: 'textarea' },
         { label: 'WhatsApp Número', field: 'whatsappNumber' },

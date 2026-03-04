@@ -7,7 +7,8 @@ import {
     Palette,
     LogOut,
     Menu,
-    X
+    X,
+    Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -28,6 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
     const menuItems = [
         { id: 'profile', label: 'Biografía', icon: <User className="w-5 h-5" /> },
+        { id: 'about', label: 'Sobre Mí', icon: <Info className="w-5 h-5" /> },
         { id: 'projects', label: 'Proyectos', icon: <Code2 className="w-5 h-5" /> },
         { id: 'skills', label: 'Habilidades', icon: <BarChart3 className="w-5 h-5" /> },
         { id: 'experience', label: 'Experiencia', icon: <Briefcase className="w-5 h-5" /> },

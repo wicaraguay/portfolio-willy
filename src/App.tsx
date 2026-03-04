@@ -43,10 +43,12 @@ function PortfolioWrapper() {
         const snapshots = await Promise.all(promises);
 
         snapshots.forEach((docSnap, index) => {
+          const name = collections[index];
           if (docSnap.exists()) {
-            const name = collections[index];
             const docData = docSnap.data();
-            results[name] = (name === 'profile' || name === 'settings') ? docData : docData.data;
+            results[name] = (name === 'profile' || name === 'settings') ? docData : (docData.data || []);
+          } else {
+            results[name] = (name === 'profile' || name === 'settings') ? {} : [];
           }
         });
 

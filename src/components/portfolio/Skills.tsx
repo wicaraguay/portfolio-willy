@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Layout, Server, Terminal } from 'lucide-react';
+import { Layout, Server, Terminal, Cpu } from 'lucide-react';
 import { Settings } from '../../types';
 
 interface SkillsProps {
@@ -16,7 +16,10 @@ const Skills: React.FC<SkillsProps> = ({ settings }) => {
             transition={{ duration: 0.7 }}
             className="space-y-6"
         >
-            <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-wide uppercase">{settings.arsenalTitle}</h2>
+            <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.2em] uppercase flex items-center gap-3">
+                <Cpu className="w-6 h-6 text-orange-400" />
+                {settings.arsenalTitle}
+            </h2>
             <p className="text-gray-400 leading-relaxed">
                 {settings.arsenalDescription}
             </p>

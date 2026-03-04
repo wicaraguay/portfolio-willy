@@ -8,7 +8,11 @@ export const usePortfolio = (initialData?: PortfolioData) => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (initialData) return;
+        if (initialData) {
+            setData(initialData);
+            setLoading(false);
+            return;
+        }
 
         const fetchData = async () => {
             try {

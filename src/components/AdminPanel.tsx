@@ -13,6 +13,7 @@ import ProjectsEditor from './admin/ProjectsEditor';
 import SkillsEditor from './admin/SkillsEditor';
 import ExperienceEditor from './admin/ExperienceEditor';
 import SettingsEditor from './admin/SettingsEditor';
+import AboutEditor from './admin/AboutEditor';
 
 export default function AdminPanel() {
   const {
@@ -78,6 +79,8 @@ export default function AdminPanel() {
         return <SkillsEditor {...listProps} />;
       case 'experience':
         return <ExperienceEditor {...listProps} />;
+      case 'about':
+        return <AboutEditor {...uploadProps} handleDeleteImage={deleteImage} />;
       case 'settings':
         return <SettingsEditor {...uploadProps} />;
       default:
