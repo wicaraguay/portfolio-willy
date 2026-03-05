@@ -25,7 +25,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
                     <div>
                         <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-white tracking-[0.15em] sm:tracking-[0.2em] uppercase flex items-center gap-3 mb-4">
                             <Rocket className="w-6 h-6 text-orange-400" />
-                            Repositorios Destacados
+                            Proyectos Destacados
                         </h2>
                         <p className="text-gray-400">Proyectos destacados de código abierto y arquitectura.</p>
                     </div>
